@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PERSONNEL_PROFILE: CLASSIFIED_DOSSIER - Adil Ararsa</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'mono': ['"Space Grotesk"', 'monospace'],
+            'sans': ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            surface: '#131313',
+            'surface-bright': '#3a3939',
+            'surface-container': '#272727',
+            primary: '#ff4500',
+            'primary-dark': '#cc3700',
+            paper: '#d4cbb8',
+            'paper-dark': '#b5a990',
+            'stamp-red': '#cc0000',
+            'ink-dark': '#1a1a1a',
+            'ink-light': '#333333'
+          },
+          backgroundImage: {
+            'scanline': 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))',
+            'paper-texture': 'url("https://www.transparenttextures.com/patterns/cream-paper.png")',
+            'folder-texture': 'url("https://www.transparenttextures.com/patterns/cardboard.png")'
+          },
+          backgroundSize: {
+            'scanline-size': '100% 4px, 3px 100%'
+          },
+          boxShadow: {
+            'dossier': '0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(0,0,0,0.2)',
+            'photo': '0 4px 8px rgba(0,0,0,0.5)',
+            'sticky': '2px 4px 6px rgba(0,0,0,0.3)'
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-effects">
+    body {
+      background-color: #131313;
+      color: #e0e0e0;
+      position: relative;
+    }
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 4px, 3px 100%;
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    .crt-flicker {
+      animation: flicker 0.15s infinite;
+    }
+    @keyframes flicker {
+      0% { opacity: 0.95; }
+      50% { opacity: 1; }
+      100% { opacity: 0.95; }
+    }
+    
+    /* Paper and Ink Effects */
+    .ink-text {
+      color: #1a1a1a;
+      text-shadow: 0px 0px 1px rgba(0,0,0,0.2);
+    }
+    .typewriter {
+      font-family: 'Courier New', Courier, monospace;
+      letter-spacing: -0.5px;
+    }
+    .stamp {
+      font-family: 'Arial Black', sans-serif;
+      color: #cc0000;
+      border: 3px solid #cc0000;
+      padding: 0.25rem 0.5rem;
+      transform: rotate(-5deg);
+      opacity: 0.8;
+      mix-blend-mode: multiply;
+    }
+    .divider-line {
+      height: 2px;
+      background: linear-gradient(to right, transparent, #1a1a1a, transparent);
+      margin: 1rem 0;
+    }
+    .handwriting {
+      font-family: 'Caveat', 'Comic Sans MS', cursive; /* Fallback for handwriting */
+      color: #0f172a;
+      transform: rotate(-2deg);
+    }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="font-mono bg-surface min-h-screen flex flex-col items-center p-4 sm:p-8 crt-flicker">
+<div class="scanlines"></div>
+<!-- BEGIN: TopNavBar -->
+<nav class="w-full max-w-6xl flex justify-between items-center mb-8 border-b border-surface-bright pb-4 z-10 relative">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-sm text-surface font-bold text-xl">
+<i class="fa-solid fa-fingerprint"></i>
+</div>
+<h1 class="text-2xl font-bold tracking-widest text-gray-200">NOIR<span class="text-primary">_OS</span></h1>
+</div>
+<div class="hidden md:flex gap-8 text-sm tracking-wider font-semibold">
+<a class="text-primary border-b-2 border-primary pb-1" href="#">DOSSIER</a>
+<a class="text-gray-400 hover:text-gray-200 transition-colors" href="#">EVIDENCE</a>
+<a class="text-gray-400 hover:text-gray-200 transition-colors" href="#">REPORTS</a>
+<a class="text-gray-400 hover:text-gray-200 transition-colors" href="#">ARCHIVE</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-gray-400 hover:text-primary transition-colors">
+<i class="fa-solid fa-search"></i>
+</button>
+<button class="text-gray-400 hover:text-primary transition-colors">
+<i class="fa-solid fa-bars"></i>
+</button>
+</div>
+</nav>
+<!-- END: TopNavBar -->
+<!-- BEGIN: Main Content - Dossier -->
+<main class="w-full max-w-4xl z-10 relative mt-4">
+<!-- Folder Background -->
+<div class="bg-[#bda678] bg-folder-texture rounded-r-xl rounded-bl-xl p-2 md:p-4 shadow-dossier relative border border-[#96825c]">
+<!-- Dossier Tab -->
+<div class="absolute -right-8 top-32 bg-[#bda678] bg-folder-texture px-2 py-8 rounded-r-md border-y border-r border-[#96825c] shadow-md flex items-center justify-center transform origin-left">
+<span class="writing-mode-vertical transform rotate-180 font-bold text-ink-light tracking-widest text-lg opacity-60">DOSSIER</span>
+</div>
+<!-- Paper Content -->
+<div class="bg-paper bg-paper-texture rounded-sm shadow-inner min-h-[800px] p-6 md:p-10 text-ink-dark border border-paper-dark relative">
+<!-- Top Header & Stamp -->
+<div class="flex flex-col items-center mb-6 relative">
+<div class="absolute top-0 left-0 w-16 h-24 border-l-2 border-t-2 border-ink-light opacity-30 rounded-tl-3xl"></div>
+<div class="text-center w-full max-w-lg relative z-10">
+<p class="typewriter text-sm font-bold uppercase tracking-widest border-b border-ink-light pb-1 mb-2">
+              ORGANIZATION/UNIT: Special Operations Task Group - <span class="bg-ink-dark text-ink-dark px-1">███████</span>
+</p>
+<h2 class="text-xl md:text-2xl font-black text-stamp-red uppercase tracking-[0.2em] mb-2 stamp inline-block">
+              CLASSIFICATION: CONFIDENTIAL - EYES ONLY
+            </h2>
+<div class="flex justify-between text-xs md:text-sm typewriter font-bold border-t border-b border-ink-light py-1 mt-2">
+<span>DOSSIER Nº: SC-014-F</span>
+<span class="text-stamp-red">STATUS: ACTIVE DUTY</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 mt-8">
+<!-- Left Column: Photo & Brief -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Photo ID -->
+<div>
+<div class="bg-ink-light text-paper text-center py-1 text-sm font-bold tracking-widest mb-2 shadow-sm">
+                PHOTO ID
+              </div>
+<div class="border-4 border-paper-dark p-1 bg-white shadow-photo relative">
+<!-- Paperclip visual -->
+<div class="absolute -top-4 -left-2 w-8 h-12 border-2 border-gray-400 rounded-full opacity-60 transform rotate-12 z-20" style="border-top-color: transparent;"></div>
+<img alt="Adil Ararsa Portrait" class="w-full h-auto filter grayscale contrast-125 sepia-[.3]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCltDSW2prq_gtVLXcpdDTf4PpL94G2kMZmjzkj1tVytDNnNbz5gQsgOc0euEGC9E1KM3K1n1Z8pmJQy6etvk6vMcjrA0ZMTXcuSS6jpmPncELv5NKC4TU_UuA3CpjZd5RjuSUh8TWTqehpfHlHNnfFzL3ua7Te0IgEitoviM-lSH8ROp8QoM5V7uJhkjlYwfeo5DxnIrybrXASQpSDzUHCyzlrAVCCeaWDHTufCU_AaHWK1CDW2D0APg"/>
+</div>
+</div>
+<!-- Left Personal Data (Mobile mainly, or redundant visual) -->
+<div class="hidden md:block">
+<div class="flex items-center gap-2 mb-2">
+<div class="h-px bg-ink-light flex-grow"></div>
+<span class="text-xs font-bold tracking-wider">PERSONAL DATA</span>
+<div class="h-px bg-ink-light flex-grow"></div>
+</div>
+<div class="typewriter text-sm space-y-1">
+<p><strong>FULL NAME:</strong> Adil Ararsa</p>
+<p><strong>CALLSIGN:</strong> SOLO</p>
+<p><strong>RANK:</strong> Fullstack Operative</p>
+<p><strong>UNIT ROLE:</strong> Complex System Arch.</p>
+<p><strong>AGE:</strong> ██</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Details -->
+<div class="md:col-span-8 flex flex-col gap-6 border-l border-ink-light pl-0 md:pl-6">
+<!-- Main Personal Data -->
+<div>
+<div class="flex items-center gap-2 mb-3">
+<div class="h-px bg-ink-light flex-grow"></div>
+<span class="text-sm font-bold tracking-wider">PERSONAL DATA</span>
+<div class="h-px bg-ink-light flex-grow"></div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 typewriter text-sm md:text-base">
+<p class="col-span-1 sm:col-span-2"><strong>FULL NAME:</strong> Adil Ararsa</p>
+<p><strong>CALLSIGN:</strong> <span class="font-bold text-lg">SOLO</span></p>
+<p><strong>RANK:</strong> Fullstack Operative</p>
+<p class="col-span-1 sm:col-span-2"><strong>UNIT ROLE:</strong> Complex System Architecture</p>
+<p><strong>NATIONALITY:</strong> Classified</p>
+<p><strong>CLEARANCE:</strong> Level 5</p>
+</div>
+</div>
+<!-- Operational Specialization -->
+<div>
+<div class="flex items-center gap-2 mb-3 mt-4">
+<div class="h-px bg-ink-light flex-grow"></div>
+<span class="text-sm font-bold tracking-wider">OPERATIONAL SPECIALIZATION</span>
+<div class="h-px bg-ink-light flex-grow"></div>
+</div>
+<div class="typewriter text-sm space-y-3">
+<div>
+<strong class="underline decoration-ink-light underline-offset-2">Primary Functions:</strong>
+<ul class="list-none pl-4 mt-1 space-y-1">
+<li>- Rapid Prototype Neutralization</li>
+<li>- Full-stack Deployment under pressure</li>
+<li>- Cross-platform Intelligence Gathering</li>
+</ul>
+</div>
+<div>
+<strong class="underline decoration-ink-light underline-offset-2">Secondary Functions:</strong>
+<ul class="list-none pl-4 mt-1 space-y-1">
+<li>- Legacy Code Refactoring &amp; Stabilization</li>
+<li>- Tactical UI/UX Implementation</li>
+<li>- Immediate Decision-making during chaotic sprints</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Relevant Field History -->
+<div>
+<div class="flex items-center gap-2 mb-3 mt-4 bg-ink-light text-paper px-2 py-1">
+<span class="text-sm font-bold tracking-wider">RELEVANT FIELD HISTORY</span>
+</div>
+<div class="typewriter text-sm space-y-1 pl-2 border-l-2 border-ink-light">
+<p>- Demonstrated leadership under extreme competitive programming scenarios (ICPC).</p>
+<p>- Known for maintaining unit momentum during critical deployment collapse events.</p>
+<p>- Deep involvement with Typescript/React ecosystems; high effectiveness in unstable environments.</p>
+<p>- Command authority earned through functional delivery rather than formal hierarchy.</p>
+</div>
+</div>
+<!-- Final Status -->
+<div class="mt-4 relative">
+<div class="flex items-center gap-2 mb-3 border-b border-ink-light pb-1">
+<span class="text-sm font-bold tracking-wider uppercase">Final Status</span>
+</div>
+<div class="typewriter text-sm space-y-2">
+<p class="flex items-center gap-2">
+<i class="fa-solid fa-check text-xl"></i>
+<strong>OPERATIONAL FITNESS:</strong>
+</p>
+<p class="pl-6 font-bold text-stamp-red uppercase">APPROVED - HIGH EFFECTIVENESS IN FULLSTACK ROLES</p>
+</div>
+<!-- Sticky Note -->
+<div class="absolute -bottom-16 md:-bottom-8 right-0 md:-right-12 bg-yellow-100 p-4 w-48 md:w-56 shadow-sticky transform rotate-3 border border-yellow-200 z-30 flex flex-col">
+<div class="w-full h-3 bg-yellow-200/50 mb-2"></div>
+<p class="handwriting text-lg md:text-xl leading-tight">
+                  "Doesn't slow down when things go wrong - becomes the direction."
+                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom visual anchor lines -->
+<div class="absolute bottom-4 left-6 right-6 border-b-2 border-ink-light opacity-40"></div>
+<div class="absolute bottom-2 left-6 right-6 border-b border-ink-light opacity-20"></div>
+</div>
+</div>
+</main>
+<!-- END: Main Content - Dossier -->
+<!-- MISSING_IMAGES:
+  - Adil Ararsa Portrait
+  -->
+</body></html>

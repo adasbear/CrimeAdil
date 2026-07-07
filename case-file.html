@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Case File - ADIL_ARARSA_INVESTIGATIONS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-variant": "#353534",
+            "on-secondary": "#4d2600",
+            "secondary": "#ffb77d",
+            "outline": "#ad887e",
+            "primary": "#ffb5a0",
+            "surface-container": "#201f1f",
+            "surface-dim": "#131313",
+            "on-surface": "#e5e2e1",
+            "background": "#131313",
+            "on-background": "#e5e2e1",
+            "outline-variant": "#5d4038",
+            "surface-container-high": "#2a2a2a",
+            "surface-container-low": "#1c1b1b",
+            "on-surface-variant": "#e7bdb2",
+            "surface": "#131313",
+            "surface-container-lowest": "#0e0e0e"
+          },
+          fontFamily: {
+            "headline-md": ["Space Grotesk"],
+            "body-md": ["Geist"],
+            "label-mono": ["JetBrains Mono"],
+            "display-lg": ["Space Grotesk"]
+          }
+        }
+      }
+    }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Geist:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .scanlines {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.15;
+    }
+    .case-paper {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      position: relative;
+    }
+    .case-paper::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(255, 69, 0, 0.03) 27px, rgba(255, 69, 0, 0.03) 28px);
+      pointer-events: none;
+    }
+    .stamp {
+      transform: rotate(-12deg);
+      opacity: 0.7;
+      border: 3px solid #ff4500;
+      color: #ff4500;
+      padding: 4px 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .dossier-tabs {
+      clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%);
+    }
+    .ev-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(60%) contrast(1.1);
+      transition: filter 0.4s ease;
+    }
+    .ev-img:hover {
+      filter: grayscale(0%) contrast(1);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden min-h-screen">
+<div class="scanlines"></div>
+<header class="fixed top-0 left-0 w-full z-50 flex justify-center pt-4">
+<nav class="flex gap-2">
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="index.html">CRIME SCENE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="field-notes.html">FIELD NOTES</a>
+</nav>
+</header>
+
+<main class="w-full max-w-5xl mx-auto px-4 md:px-8 pt-28 pb-16" id="case-content">
+  <div id="loading" class="text-center py-32">
+    <p class="font-label-mono text-on-surface-variant animate-pulse">LOADING CASE FILE...</p>
+  </div>
+</main>
+
+<script>
+  const projects = {
+    omega: {
+      name: "PROJECT OMEGA",
+      tagline: "Fullstack Streaming Platform",
+      tech: ["React", "Node.js", "PostgreSQL"],
+      status: "ACTIVE",
+      severity: "CRITICAL",
+      description: "A fullstack streaming platform capable of handling millions of concurrent users. Features real-time content delivery, personalized recommendation engine, and adaptive bitrate streaming. Built with a microservices architecture for maximum scalability.",
+      images: [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuAnSxIRAefH0x4DsitrkT8S7WHc5khkzz8soJPJdx5Mq7177TBH90MJsZpytHI5Ccvr40OQ_s0CJ7Hmu0yn5JgYOqIA70LqwzbH9Ca33SF1URrwdPJk6WCpTwCRvKyBvAT1rer2g8HkfQXORdHNAMOZR2XCNvpaIG92UBbllxwAyAFPvJ2lk8E0zzSlPFzUOWuH5djg0hBydUt6_Kd0IazTik9UNTeqM1mPkS_MrwrOd9t38-FgOS3hSw",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCv0NDij326wbtLIqpLirF23KZMESzTbWT5QP2qnip2oFJ7GPOULpJBa2MiTwKbQaWDzV1Mvc64sg5WoDFyZOahp_bk676i_hFzM7Bhwc4Yy9ccyO7fNbG5c6TxbM5VcYauCsllglpGhT3qaXKN1wCYaN6OHJpOH1v8Rc21GW7MLFPszD_Bev_pgjMsQZmHJpWkDENTaEk_Tz2aBy2PaeGDJfvwQcbOBXjZq6yxk_gpi-0-1t3n41N9zg"
+      ],
+      github: "https://github.com/placeholder-omega",
+      live: "https://placeholder-omega.vercel.app"
+    },
+    synapse: {
+      name: "THE SYNAPSE",
+      tagline: "AI Chat Interface",
+      tech: ["Python", "FastAPI", "OpenAI"],
+      status: "ACTIVE",
+      severity: "HIGH",
+      description: "An advanced AI chat interface leveraging large language models for natural conversation. Features context-aware responses, multi-turn dialogue management, and integration with external knowledge bases. Designed for low-latency inference at scale.",
+      images: [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCDc1kAaKusQptnLwSPEv-QqSpAa38BJ6y6_vjHPEPTSK-WDaA1E4CmWfyX1qWAo0AOMmV0L0KKwnK9jP3gA0eRKe_m_y1lgIKyb42q3RRKMBiCaYAtm0S2vDQpnR-PkIgbiDvIQFJIN1E8nTwJkFtQ9VfQu3LaqjDgx1cGBUHcKw6NHH8_SlCK0RxTxI-KCqZzOejPDPJU072ux3l4iBKEIfWGM5NMrSXmnWdWT-WJ3BhWw0bi4YT1TQ",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCyNsMK3iXnr3QqswNwaG9iaIMxcttFVfMYd31feFdP7pklNe43RiozTyd_Fe1ko2qZ29r6taKBaEEdAFUHCeugNQatoQSCwmDTLkN4ebKgm-XYDi5q8NP8OqCU_3ha0Rp742ozz6LHNF9SE_tDSSsK5hTFLDKdzibzOPgWIYd0WPPmzut3Rzgj6bL0cUqEQIbtHhGYzTLKD13AegP-rXsi0IKzt-1eWCa9XuZTFch0lB4dwHM3pZ7ocg"
+      ],
+      github: "https://github.com/placeholder-synapse",
+      live: "https://placeholder-synapse.vercel.app"
+    },
+    ghost: {
+      name: "GHOST PROTOCOL",
+      tagline: "Real-time Collaboration Hub",
+      tech: ["Next.js", "TypeScript", "Prisma"],
+      status: "PENDING",
+      severity: "CRITICAL",
+      description: "A real-time collaboration platform enabling simultaneous editing, communication, and project management. Features end-to-end encryption, WebSocket-based live sync, and role-based access control. Built for remote teams operating in high-security environments.",
+      images: [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCv0NDij326wbtLIqpLirF23KZMESzTbWT5QP2qnip2oFJ7GPOULpJBa2MiTwKbQaWDzV1Mvc64sg5WoDFyZOahp_bk676i_hFzM7Bhwc4Yy9ccyO7fNbG5c6TxbM5VcYauCsllglpGhT3qaXKN1wCYaN6OHJpOH1v8Rc21GW7MLFPszD_Bev_pgjMsQZmHJpWkDENTaEk_Tz2aBy2PaeGDJfvwQcbOBXjZq6yxk_gpi-0-1t3n41N9zg",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuAnSxIRAefH0x4DsitrkT8S7WHc5khkzz8soJPJdx5Mq7177TBH90MJsZpytHI5Ccvr40OQ_s0CJ7Hmu0yn5JgYOqIA70LqwzbH9Ca33SF1URrwdPJk6WCpTwCRvKyBvAT1rer2g8HkfQXORdHNAMOZR2XCNvpaIG92UBbllxwAyAFPvJ2lk8E0zzSlPFzUOWuH5djg0hBydUt6_Kd0IazTik9UNTeqM1mPkS_MrwrOd9t38-FgOS3hSw"
+      ],
+      github: "https://github.com/placeholder-ghost",
+      live: "https://placeholder-ghost.vercel.app"
+    },
+    cipher: {
+      name: "CIPHER HOUND",
+      tagline: "Cybersecurity Dashboard",
+      tech: ["React", "Tailwind CSS"],
+      status: "CLOSED",
+      severity: "MEDIUM",
+      description: "A comprehensive cybersecurity monitoring dashboard providing real-time threat detection, log analysis, and incident response tracking. Features interactive data visualizations, automated alerting, and compliance reporting for security operations teams.",
+      images: [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCyNsMK3iXnr3QqswNwaG9iaIMxcttFVfMYd31feFdP7pklNe43RiozTyd_Fe1ko2qZ29r6taKBaEEdAFUHCeugNQatoQSCwmDTLkN4ebKgm-XYDi5q8NP8OqCU_3ha0Rp742ozz6LHNF9SE_tDSSsK5hTFLDKdzibzOPgWIYd0WPPmzut3Rzgj6bL0cUqEQIbtHhGYzTLKD13AegP-rXsi0IKzt-1eWCa9XuZTFch0lB4dwHM3pZ7ocg",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCDc1kAaKusQptnLwSPEv-QqSpAa38BJ6y6_vjHPEPTSK-WDaA1E4CmWfyX1qWAo0AOMmV0L0KKwnK9jP3gA0eRKe_m_y1lgIKyb42q3RRKMBiCaYAtm0S2vDQpnR-PkIgbiDvIQFJIN1E8nTwJkFtQ9VfQu3LaqjDgx1cGBUHcKw6NHH8_SlCK0RxTxI-KCqZzOejPDPJU072ux3l4iBKEIfWGM5NMrSXmnWdWT-WJ3BhWw0bi4YT1TQ"
+      ],
+      github: "https://github.com/placeholder-cipher",
+      live: "https://placeholder-cipher.vercel.app"
+    }
+  };
+
+  function getProjectId() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id') || 'omega';
+  }
+
+  function renderCase(projectId) {
+    const project = projects[projectId];
+    if (!project) {
+      document.getElementById('case-content').innerHTML = '<p class="text-center py-32 font-label-mono text-on-surface-variant">CASE FILE NOT FOUND</p>';
+      return;
+    }
+
+    document.title = `${project.name} - Case File`;
+
+    const statusColor = 
+      project.status === 'ACTIVE' ? 'text-green-400' :
+      project.status === 'PENDING' ? 'text-yellow-400' : 'text-gray-400';
+    const severityColor = 
+      project.severity === 'CRITICAL' ? 'text-red-400' :
+      project.severity === 'HIGH' ? 'text-orange-400' : 'text-yellow-400';
+
+    const techBadges = project.tech.map((t, i) => {
+      const opacity = ['', '/80', '/60'][i] || '/60';
+      return `<span class="bg-secondary${opacity} text-background font-label-mono text-xs uppercase py-1 px-2 font-bold">${t}</span>`;
+    }).join('');
+
+    document.getElementById('case-content').innerHTML = `
+      <div class="relative">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <a href="evidence.html" class="font-label-mono text-xs text-on-surface-variant hover:text-secondary transition-colors">&larr; BACK TO EVIDENCE</a>
+            <h1 class="font-display-lg text-4xl md:text-5xl text-on-surface font-bold uppercase tracking-tighter mt-2">${project.name}</h1>
+            <p class="font-label-mono text-sm text-secondary mt-1">${project.tagline}</p>
+          </div>
+          <div class="stamp font-label-mono text-sm">CLASSIFIED</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div class="case-paper p-2 h-72 overflow-hidden">
+            <img class="ev-img" src="${project.images[0]}" alt="${project.name} evidence photo 1" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-on-surface-variant font-label-mono text-xs\\'>EVIDENCE_IMG_A_MISSING</div>'"/>
+          </div>
+          <div class="case-paper p-2 h-72 overflow-hidden">
+            <img class="ev-img" src="${project.images[1]}" alt="${project.name} evidence photo 2" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-on-surface-variant font-label-mono text-xs\\'>EVIDENCE_IMG_B_MISSING</div>'"/>
+          </div>
+        </div>
+
+        <div class="case-paper p-6 md:p-8 mb-8">
+          <div class="flex items-center gap-2 mb-4 border-b border-outline-variant pb-2">
+            <span class="material-symbols-outlined text-secondary text-sm">description</span>
+            <h2 class="font-label-mono text-sm text-secondary uppercase tracking-wider">Case Details</h2>
+          </div>
+          <p class="font-body-md text-on-surface-variant leading-relaxed">${project.description}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="case-paper p-6">
+            <div class="flex items-center gap-2 mb-4 border-b border-outline-variant pb-2">
+              <span class="material-symbols-outlined text-secondary text-sm">build</span>
+              <h2 class="font-label-mono text-sm text-secondary uppercase tracking-wider">Tech Stack</h2>
+            </div>
+            <div class="flex flex-wrap gap-2">${techBadges}</div>
+          </div>
+          <div class="case-paper p-6">
+            <div class="flex items-center gap-2 mb-4 border-b border-outline-variant pb-2">
+              <span class="material-symbols-outlined text-secondary text-sm">info</span>
+              <h2 class="font-label-mono text-sm text-secondary uppercase tracking-wider">Case Status</h2>
+            </div>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="font-label-mono text-xs text-on-surface-variant uppercase">Status</span>
+                <span class="font-label-mono text-sm font-bold ${statusColor}">${project.status}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-label-mono text-xs text-on-surface-variant uppercase">Severity</span>
+                <span class="font-label-mono text-sm font-bold ${severityColor}">${project.severity}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-label-mono text-xs text-on-surface-variant uppercase">Case ID</span>
+                <span class="font-label-mono text-sm text-on-surface">${projectId.toUpperCase()}-${Math.floor(Math.random() * 9000) + 1000}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="${project.github}" target="_blank" class="flex items-center justify-center gap-2 bg-surface-container-high border border-outline-variant text-on-surface hover:bg-secondary hover:text-background hover:border-secondary font-label-mono text-sm uppercase tracking-wider px-8 py-3 transition-all duration-300">
+            <span class="material-symbols-outlined text-sm">code</span>
+            Source Code
+          </a>
+          <a href="${project.live}" target="_blank" class="flex items-center justify-center gap-2 bg-secondary text-background border border-secondary hover:bg-transparent hover:text-secondary font-label-mono text-sm uppercase tracking-wider px-8 py-3 transition-all duration-300">
+            <span class="material-symbols-outlined text-sm">open_in_new</span>
+            Live Site
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const id = getProjectId();
+    renderCase(id);
+  });
+</script>
+</body></html>

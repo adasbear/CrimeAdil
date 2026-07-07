@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CASE FILE: PROJECT_OMEGA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&amp;family=JetBrains+Mono:wght@400..700&amp;family=Space+Grotesk:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#3a3939",
+                        "outline": "#ad887e",
+                        "outline-variant": "#5d4038",
+                        "on-tertiary-fixed-variant": "#004785",
+                        "secondary-fixed": "#ffdcc3",
+                        "on-tertiary": "#00315e",
+                        "surface-container-high": "#2a2a2a",
+                        "on-primary-fixed-variant": "#872000",
+                        "primary-fixed": "#ffdbd1",
+                        "surface-tint": "#ffb5a0",
+                        "surface-dim": "#131313",
+                        "inverse-primary": "#b12d00",
+                        "tertiary-container": "#2592ff",
+                        "background": "#131313",
+                        "on-secondary": "#4d2600",
+                        "primary-fixed-dim": "#ffb5a0",
+                        "tertiary-fixed-dim": "#a5c8ff",
+                        "surface-variant": "#353534",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313030",
+                        "inverse-surface": "#e5e2e1",
+                        "on-tertiary-container": "#002a53",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#d4e3ff",
+                        "tertiary": "#a5c8ff",
+                        "secondary-fixed-dim": "#ffb77d",
+                        "secondary": "#ffb77d",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "on-secondary-container": "#603100",
+                        "on-primary": "#601400",
+                        "surface-container-low": "#1c1b1b",
+                        "surface": "#131313",
+                        "primary-container": "#ff5625",
+                        "on-secondary-fixed": "#2f1500",
+                        "primary": "#ffb5a0",
+                        "on-tertiary-fixed": "#001c3a",
+                        "on-primary-container": "#541100",
+                        "on-surface": "#e5e2e1",
+                        "on-background": "#e5e2e1",
+                        "error-container": "#93000a",
+                        "surface-container": "#201f1f",
+                        "error": "#ffb4ab",
+                        "on-surface-variant": "#e7bdb2",
+                        "secondary-container": "#fd8b00",
+                        "on-primary-fixed": "#3b0900",
+                        "surface-container-highest": "#353534"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container-max": "1200px",
+                        "margin-mobile": "16px",
+                        "unit": "8px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Space Grotesk"],
+                        "body-md": ["Geist"],
+                        "label-mono": ["JetBrains Mono"],
+                        "headline-md": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["48px", { "lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .scanlines {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+        .noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        .dossier-paper {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        .dossier-paper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(255, 69, 0, 0.05) 27px, rgba(255, 69, 0, 0.05) 28px);
+            pointer-events: none;
+        }
+        .polaroid {
+            background-color: #e5e2e1;
+            padding: 12px 12px 48px 12px;
+            box-shadow: 4px 4px 15px rgba(0,0,0,0.5);
+            transform: rotate(-3deg);
+            border: 1px solid #ccc;
+        }
+        .pin {
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, #ff7b54, #cc2900);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.5), inset -2px -2px 4px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        .pin::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 2px; height: 10px;
+            background: #666;
+            transform: translate(-50%, 0);
+            z-index: -1;
+        }
+        .red-string {
+            position: absolute;
+            background-color: #cc2900;
+            height: 2px;
+            transform-origin: 0 50%;
+            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .stamp {
+            border: 4px solid #b12d00;
+            color: #b12d00;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 3rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transform: rotate(-15deg);
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+        
+        .typewriter-text {
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen relative overflow-x-hidden">
+<!-- Atmospheric Overlays -->
+<div class="fixed inset-0 scanlines z-50"></div>
+<div class="fixed inset-0 noise z-50"></div>
+<div class="fixed inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000000_100%)] opacity-60 z-40 pointer-events-none"></div>
+<!-- Navigation Shell (TopNavBar) -->
+<nav class="flex justify-between items-center w-full px-margin-desktop h-16 z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant docked full-width top-0 fixed top-0 left-0 right-0">
+<div class="font-headline-md text-headline-md tracking-tighter text-primary uppercase">ADIL ARARSA // CASE_FILE_001</div>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-mono text-label-mono hover:text-primary hover:bg-surface-container-highest/20 transition-colors Active: skew-x-12 transition-transform" href="#">DOSSIER</a>
+<a class="text-on-surface-variant font-medium font-label-mono text-label-mono hover:text-primary hover:bg-surface-container-highest/20 transition-colors" href="#">EVIDENCE</a>
+<a class="text-on-surface-variant font-medium font-label-mono text-label-mono hover:text-primary hover:bg-surface-container-highest/20 transition-colors" href="#">REPORTS</a>
+<a class="text-on-surface-variant font-medium font-label-mono text-label-mono hover:text-primary hover:bg-surface-container-highest/20 transition-colors" href="#">ARCHIVE</a>
+</div>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 font-label-mono text-label-mono font-bold hover:bg-primary-fixed transition-colors border border-primary">DECRYPT</button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-16 px-4 md:px-margin-desktop max-w-container-max mx-auto relative min-h-screen flex flex-col justify-center items-center">
+<!-- The Dossier Board -->
+<div class="relative w-full max-w-5xl h-[800px] bg-surface-container-lowest border border-outline-variant rounded-sm overflow-hidden shadow-[inset_0_0_50px_rgba(0,0,0,0.8)]">
+<!-- Background Texture -->
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-20"></div>
+<!-- Stamp -->
+<div class="absolute top-20 right-20 stamp z-30">CLASSIFIED</div>
+<!-- Central Exhibit (Polaroid) -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+<div class="polaroid w-64 h-80 relative">
+<div class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-8 h-8 opacity-80">
+<span class="material-symbols-outlined text-surface-dim text-3xl transform rotate-45" style="font-variation-settings: 'FILL' 1;">push_pin</span>
+</div>
+<img class="w-full h-full object-cover grayscale contrast-125 sepia-[.2]" data-alt="A gritty, high-contrast black and white photograph of a complex, futuristic computer server rack or abstract technological structure, deeply shadowed, evoking a sense of classified intelligence data." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDndbwK9DG7jTy0dMFpcM05JvSSzSo2l_KuscxnoMStdmg7POn_C0ZGROV-naTmaNta5bILxhPPEfJ0Yg-z5Zr1GABZsX34qDHavb5jYQe8g25a7ZAV7vZ4LKOuAVDUXHXc7I3J-v8HVeJgPvbF-bknsEnkgDl7oV3ypWsFcdjJthMqNLYzNqgONzzQUCJyjHRCAkccVER_Uz6ShhCMpNm3rROGaOW6kfUcUsAqC0RDN1N36cX8LX4U5pLati6fk7DSqkY"/>
+<div class="absolute bottom-4 left-4 text-surface-dim font-label-mono text-sm font-bold opacity-80 typewriter-text">EXHIBIT_A</div>
+</div>
+<!-- Pin for string connection -->
+<div class="pin -top-2 left-1/2 transform -translate-x-1/2" id="pin-center"></div>
+</div>
+<!-- Document 1: Title & Case Info -->
+<div class="absolute top-12 left-12 dossier-paper w-80 p-6 transform -rotate-2 z-10">
+<div class="pin top-2 left-2" id="pin-tl"></div>
+<div class="border border-outline-variant inline-block px-2 py-1 mb-4 bg-surface-bright/50">
+<span class="font-label-mono text-primary font-bold text-lg typewriter-text">CASE No. <span class="text-inverse-primary">PRJ_884</span></span>
+</div>
+<h1 class="font-display-lg text-4xl mb-2 text-on-surface uppercase tracking-tighter leading-none">THE<br/>SUSPICIOUS<br/>PROTOCOL</h1>
+<div class="mt-4 border-t border-outline-variant pt-2">
+<span class="font-label-mono text-on-surface-variant text-xs typewriter-text block mb-1">INCIDENT_DATE:</span>
+<span class="font-body-md text-on-surface block">2024.11.15 - PRESENT</span>
+</div>
+<!-- Action Button styled as clipped note -->
+<button class="mt-6 flex items-center gap-2 border border-primary px-3 py-1 bg-surface-dim text-primary font-label-mono text-sm hover:bg-primary hover:text-on-primary transition-colors uppercase group relative overflow-hidden">
+<span class="material-symbols-outlined text-sm">attach_file</span>
+                    LIVE_SITE.EXE
+                    <div class="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-[glitch_0.2s_linear]"></div>
+</button>
+</div>
+<!-- Document 2: Details / Place & Date -->
+<div class="absolute bottom-16 left-8 dossier-paper w-72 p-5 transform rotate-3 z-10">
+<div class="pin top-2 right-2" id="pin-bl"></div>
+<h2 class="font-headline-md text-xl text-primary mb-4 typewriter-text uppercase border-b border-outline-variant pb-1">TARGET_DATA:</h2>
+<ul class="space-y-3 font-body-md text-on-surface-variant">
+<li class="flex items-start gap-2">
+<span class="text-primary mt-1">+</span>
+<div>
+<span class="block text-on-surface typewriter-text font-bold text-sm">LOCATION:</span>
+                            SERVER_NODE_09
+                        </div>
+</li>
+<li class="flex items-start gap-2">
+<span class="text-primary mt-1">+</span>
+<div>
+<span class="block text-on-surface typewriter-text font-bold text-sm">OBJECTIVE:</span>
+                            Full-stack web application deployment
+                        </div>
+</li>
+<li class="flex items-start gap-2">
+<span class="text-primary mt-1">+</span>
+<div>
+<span class="block text-on-surface typewriter-text font-bold text-sm">STATUS:</span>
+<span class="text-inverse-primary">ACTIVE_MONITORING</span>
+</div>
+</li>
+</ul>
+<div class="mt-4 text-center">
+<span class="material-symbols-outlined text-inverse-primary text-4xl opacity-50" style="font-variation-settings: 'FILL' 1;">fingerprint</span>
+</div>
+</div>
+<!-- Document 3: Tools / Gifts -->
+<div class="absolute top-24 right-12 dossier-paper w-72 p-5 transform rotate-2 z-10">
+<div class="pin top-2 right-2" id="pin-tr"></div>
+<h2 class="font-headline-md text-xl text-primary mb-4 typewriter-text uppercase border-b border-outline-variant pb-1">TOOLS_USED:</h2>
+<ul class="space-y-2 font-body-md text-on-surface-variant">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_box_outline_blank</span>
+<span class="typewriter-text text-sm">React.js Core</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_box_outline_blank</span>
+<span class="typewriter-text text-sm">Tailwind CSS</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_box_outline_blank</span>
+<span class="typewriter-text text-sm">Node.js Backend</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_box_outline_blank</span>
+<span class="typewriter-text text-sm">PostgreSQL DB</span>
+</li>
+</ul>
+</div>
+<!-- Document 4: Notice -->
+<div class="absolute bottom-20 right-16 dossier-paper w-80 p-5 transform -rotate-1 z-10 bg-surface-container-high border-outline">
+<div class="pin top-2 left-2" id="pin-br"></div>
+<h2 class="font-headline-md text-xl text-primary mb-3 typewriter-text uppercase border-b border-outline pb-1">NOTICE:</h2>
+<ol class="list-decimal list-inside space-y-2 font-body-md text-on-surface-variant text-sm">
+<li>Access to source code requires level 3 clearance.</li>
+<li>API keys have been redacted from this file.</li>
+<li>For inquiries regarding this build, contact HQ.</li>
+</ol>
+<div class="mt-4 p-3 border border-outline border-dashed bg-surface-dim">
+<span class="font-label-mono text-primary text-xs block mb-1">HASHTAG EVENT:</span>
+<span class="text-inverse-primary font-bold text-sm block">#CYBER_NOIR_BUILD</span>
+<span class="text-inverse-primary font-bold text-sm block">#FULLSTACK_OP</span>
+</div>
+</div>
+<!-- Red Strings (SVG overlays) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-15" id="string-svg">
+<!-- Lines will be drawn here by JS, fallback static lines if JS fails -->
+<line class="opacity-0 lg:opacity-100" stroke="#cc2900" stroke-width="2" x1="100" x2="400" y1="100" y2="400"></line>
+</svg>
+</div>
+</main>
+<!-- Footer -->
+<footer class="flex justify-between items-center w-full px-margin-desktop py-unit bg-surface-container-lowest z-50 border-t border-outline-variant docked full-width bottom-0 relative">
+<div class="font-label-mono text-label-mono uppercase text-on-surface-variant">© 2024 DEPT_OF_CYBER_CRIME // ALL RIGHTS RESERVED</div>
+<div class="flex gap-4">
+<a class="font-label-mono text-label-mono uppercase text-on-surface-variant hover:text-secondary transition-opacity Hover: opacity-80" href="#">STATUS: ENCRYPTED</a>
+<a class="font-label-mono text-label-mono uppercase text-on-surface-variant hover:text-secondary transition-opacity Hover: opacity-80" href="#">IP_LOGGED</a>
+<a class="font-label-mono text-label-mono uppercase text-on-surface-variant hover:text-secondary transition-opacity Hover: opacity-80" href="#">ENCRYPTION_v2.0</a>
+</div>
+</footer>
+<script>
+        // Simple JS to draw strings between pins for that authentic conspiracy board look
+        document.addEventListener('DOMContentLoaded', () => {
+            const svg = document.getElementById('string-svg');
+            const board = svg.parentElement;
+            
+            function drawLine(id1, id2) {
+                const el1 = document.getElementById(id1);
+                const el2 = document.getElementById(id2);
+                if (!el1 || !el2) return;
+
+                const rect1 = el1.getBoundingClientRect();
+                const rect2 = el2.getBoundingClientRect();
+                const boardRect = board.getBoundingClientRect();
+
+                // Calculate positions relative to the board
+                const x1 = rect1.left - boardRect.left + (rect1.width / 2);
+                const y1 = rect1.top - boardRect.top + (rect1.height / 2);
+                const x2 = rect2.left - boardRect.left + (rect2.width / 2);
+                const y2 = rect2.top - boardRect.top + (rect2.height / 2);
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', '#cc2900');
+                line.setAttribute('stroke-width', '2');
+                line.style.filter = 'drop-shadow(0px 2px 2px rgba(0,0,0,0.5))';
+
+                svg.appendChild(line);
+            }
+
+            // Clear existing static fallback lines
+            svg.innerHTML = '';
+            
+            // Draw connections
+            setTimeout(() => {
+                drawLine('pin-center', 'pin-tl');
+                drawLine('pin-center', 'pin-tr');
+                drawLine('pin-center', 'pin-bl');
+                drawLine('pin-center', 'pin-br');
+                drawLine('pin-tl', 'pin-bl');
+            }, 100); // slight delay to ensure layout is done
+            
+            // Redraw on resize
+            window.addEventListener('resize', () => {
+                svg.innerHTML = '';
+                drawLine('pin-center', 'pin-tl');
+                drawLine('pin-center', 'pin-tr');
+                drawLine('pin-center', 'pin-bl');
+                drawLine('pin-center', 'pin-br');
+                drawLine('pin-tl', 'pin-bl');
+            });
+        });
+    </script>
+</body></html>

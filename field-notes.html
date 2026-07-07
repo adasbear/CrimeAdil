@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Field Notes - Classified Archives</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#131313",
+            "surface-dim": "#131313",
+            "surface-bright": "#3a3939",
+            "surface-container-lowest": "#0e0e0e",
+            "surface-container-low": "#1c1b1b",
+            "surface-container": "#201f1f",
+            "surface-container-high": "#2a2a2a",
+            "surface-container-highest": "#353534",
+            "primary": "#ff4500",
+            "on-primary": "#000000",
+            "outline-variant": "#5d4038",
+            "on-surface": "#e5e2e1",
+            "on-surface-variant": "#a3a3a3"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk", "sans-serif"],
+            "label": ["JetBrains Mono", "monospace"],
+            "body": ["Geist", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-utilities">
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@400;500&display=swap');
+    body {
+      background-color: #131313;
+      color: #e5e2e1;
+      background-image: 
+        linear-gradient(rgba(255, 69, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 69, 0, 0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      overflow-x: hidden;
+    }
+    .police-tape-text {
+      background: #f59e0b;
+      color: #000;
+      font-weight: 900;
+      font-family: 'Arial Black', sans-serif;
+      letter-spacing: 2px;
+      border-top: 2px solid #000;
+      border-bottom: 2px solid #000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    }
+    .title-glitch {
+      font-size: 6rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      background: linear-gradient(to bottom, #ffffff, #888888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+      letter-spacing: -2px;
+    }
+    .tactical-card {
+      background: linear-gradient(145deg, #1c1c1c, #131313);
+      border: 1px solid #333333;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .tactical-card:hover {
+      border-color: #ff4500;
+      box-shadow: 0 0 20px rgba(255, 69, 0, 0.1);
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #ff4500;
+      box-shadow: 0 0 8px #ff4500;
+    }
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0,0,0,0.1) 50%,
+        rgba(0,0,0,0.1)
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0.3;
+    }
+    .dossier-tabs {
+      clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%);
+    }
+  </style>
+</head>
+<body class="font-body antialiased relative min-h-screen">
+<div class="scanlines"></div>
+<div class="fixed inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] pointer-events-none z-10"></div>
+<header class="fixed top-0 left-0 w-full z-50 flex justify-center pt-4">
+<nav class="flex gap-2">
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="index.html">CRIME SCENE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
+<a class="dossier-tabs bg-[#fdf5c9] text-black font-label px-8 py-2 text-sm font-bold shadow-md hover:bg-white transition-colors" href="field-notes.html">FIELD NOTES</a>
+</nav>
+</header>
+<section class="relative w-full flex flex-col items-center justify-center mb-16 pt-28 overflow-hidden">
+<div class="absolute w-[110%] -left-[5%] top-20 rotate-[-2deg] z-0 opacity-80 overflow-hidden shadow-2xl pointer-events-none">
+<div class="police-tape-text py-2 whitespace-nowrap overflow-hidden flex">
+<span class="inline-block animate-marquee pr-4">
+          - CRIME SCENE - POLICE LINE - DO NOT CROSS - CRIME SCENE - POLICE LINE - DO NOT CROSS - CRIME SCENE - POLICE LINE - DO NOT CROSS - CRIME SCENE - POLICE LINE - DO NOT CROSS -
+        </span>
+<span class="inline-block animate-marquee pr-4">
+          - CRIME SCENE - POLICE LINE - DO NOT CROSS - CRIME SCENE - POLICE LINE - DO NOT CROSS - CRIME SCENE - POLICE LINE - DO NOT CROSS - CRIME SCENE - POLICE LINE - DO NOT CROSS -
+        </span>
+</div>
+</div>
+<div class="absolute w-[120%] -right-[10%] top-32 rotate-[1deg] z-0 opacity-60 overflow-hidden blur-[2px] pointer-events-none">
+<div class="police-tape-text py-3 whitespace-nowrap overflow-hidden flex bg-orange-700 text-black">
+<span class="inline-block animate-marquee-right pr-4">
+          - EVIDENCE - DO NOT TAMPER - EVIDENCE - DO NOT TAMPER - EVIDENCE - DO NOT TAMPER - EVIDENCE - DO NOT TAMPER -
+        </span>
+<span class="inline-block animate-marquee-right pr-4">
+          - EVIDENCE - DO NOT TAMPER - EVIDENCE - DO NOT TAMPER - EVIDENCE - DO NOT TAMPER - EVIDENCE - DO NOT TAMPER -
+        </span>
+</div>
+</div>
+<h1 class="title-glitch font-headline text-center relative z-20 mt-12 mb-6">FIELD NOTES</h1>
+<div class="border border-primary/50 bg-black/60 rounded-full px-8 py-2 shadow-[0_0_15px_rgba(255,69,0,0.2)] backdrop-blur-sm z-20 relative">
+<p class="text-primary font-label text-sm tracking-[0.3em]">CLASSIFIED ARCHIVES // LEVEL 4</p>
+</div>
+</section>
+<main class="container mx-auto px-4 md:px-8 max-w-4xl pb-24 relative z-20">
+<section class="flex flex-col gap-6" data-purpose="field-notes-list">
+<article class="tactical-card rounded-xl p-8 reveal cursor-pointer" onclick="window.location.href='blog-post.html?id=0'">
+<div class="flex items-center gap-4 mb-6">
+<span class="border border-primary/50 text-primary text-xs font-bold px-3 py-1 rounded-full bg-orange-950/20 tracking-wider font-label">CLASSIFIED</span>
+<span class="bg-surface-container-high text-on-surface-variant text-xs font-label px-3 py-1 rounded-full">4/21/2026</span>
+</div>
+<h2 class="text-3xl font-headline font-bold text-white mb-8 hover:text-primary transition-colors">
+          Why localization is not always the answer
+        </h2>
+<div class="border-t border-surface-container-highest pt-6 flex justify-between items-center">
+<div class="flex items-center gap-2 font-label text-xs text-on-surface-variant">
+<span class="status-dot"></span>
+<span>0 VIEWS</span>
+</div>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-white px-4 py-2 rounded font-label text-xs tracking-wider transition-colors flex items-center gap-2" onclick="event.stopPropagation(); window.location.href='blog-post.html?id=0'">
+            EXTRACT INTEL <span class="text-primary">→</span>
+</button>
+</div>
+</article>
+<article class="tactical-card rounded-xl p-8 reveal cursor-pointer" onclick="window.location.href='blog-post.html?id=1'">
+<div class="flex items-center gap-4 mb-6">
+<span class="border border-primary/50 text-primary text-xs font-bold px-3 py-1 rounded-full bg-orange-950/20 tracking-wider font-label">CLASSIFIED</span>
+<span class="bg-surface-container-high text-on-surface-variant text-xs font-label px-3 py-1 rounded-full">4/10/2026</span>
+</div>
+<h2 class="text-3xl font-headline font-bold text-white mb-8 hover:text-primary transition-colors">
+          Why developers make a sh*t ton of money
+        </h2>
+<div class="border-t border-surface-container-highest pt-6 flex justify-between items-center">
+<div class="flex items-center gap-2 font-label text-xs text-on-surface-variant">
+<span class="status-dot"></span>
+<span>1364 VIEWS</span>
+</div>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-white px-4 py-2 rounded font-label text-xs tracking-wider transition-colors flex items-center gap-2" onclick="event.stopPropagation(); window.location.href='blog-post.html?id=1'">
+            EXTRACT INTEL <span class="text-primary">→</span>
+</button>
+</div>
+</article>
+</section>
+</main>
+<style data-purpose="animations">
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes marquee-right {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+    .animate-marquee {
+      animation: marquee 20s linear infinite;
+    }
+    .animate-marquee-right {
+      animation: marquee-right 20s linear infinite;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal:nth-child(1) { transition-delay: 0s; }
+    .reveal:nth-child(2) { transition-delay: 0.15s; }
+    .reveal:nth-child(3) { transition-delay: 0.3s; }
+  </style>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }, 100);
+</script>
+</body></html>
