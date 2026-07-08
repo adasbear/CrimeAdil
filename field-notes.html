@@ -62,7 +62,7 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.8);
     }
     .title-glitch {
-      font-size: 6rem;
+      font-size: clamp(2.5rem, 10vw, 6rem);
       font-weight: 900;
       text-transform: uppercase;
       background: linear-gradient(to bottom, #ffffff, #888888);
@@ -116,11 +116,11 @@
 <div class="scanlines"></div>
 <div class="fixed inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] pointer-events-none z-10"></div>
 <header class="fixed top-0 left-0 w-full z-50 flex justify-center pt-4">
-<nav class="flex gap-2">
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="index.html">CRIME SCENE</a>
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
-<a class="dossier-tabs bg-[#fdf5c9] text-black font-label px-8 py-2 text-sm font-bold shadow-md hover:bg-white transition-colors" href="field-notes.html">FIELD NOTES</a>
+<nav class="flex gap-1 md:gap-2 overflow-x-auto flex-nowrap">
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="index.html">CRIME SCENE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
+<a class="dossier-tabs bg-[#fdf5c9] text-black font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap font-bold shadow-md hover:bg-white transition-colors" href="field-notes.html">FIELD NOTES</a>
 </nav>
 </header>
 <section class="relative w-full flex flex-col items-center justify-center mb-16 pt-28 overflow-hidden">
@@ -145,8 +145,8 @@
 </div>
 </div>
 <h1 class="title-glitch font-headline text-center relative z-20 mt-12 mb-6">FIELD NOTES</h1>
-<div class="border border-primary/50 bg-black/60 rounded-full px-8 py-2 shadow-[0_0_15px_rgba(255,69,0,0.2)] backdrop-blur-sm z-20 relative">
-<p class="text-primary font-label text-sm tracking-[0.3em]">CLASSIFIED ARCHIVES // LEVEL 4</p>
+<div class="border border-primary/50 bg-black/60 rounded-full px-4 md:px-8 py-2 shadow-[0_0_15px_rgba(255,69,0,0.2)] backdrop-blur-sm z-20 relative">
+<p class="text-primary font-label text-xs md:text-sm tracking-[0.15em] md:tracking-[0.3em]">CLASSIFIED ARCHIVES // LEVEL 4</p>
 </div>
 </section>
 <main class="container mx-auto px-4 md:px-8 max-w-4xl pb-24 relative z-20">
@@ -190,12 +190,12 @@
       return;
     }
     list.innerHTML = data.map(p => `
-      <article class="tactical-card rounded-xl p-8 reveal cursor-pointer" onclick="window.location.href='blog-post.html?id=${p.id}'">
+      <article class="tactical-card rounded-xl p-6 md:p-8 reveal cursor-pointer" onclick="window.location.href='blog-post.html?id=${p.id}'">
         <div class="flex items-center gap-4 mb-6">
           <span class="border border-primary/50 text-primary text-xs font-bold px-3 py-1 rounded-full bg-orange-950/20 tracking-wider font-label">CLASSIFIED</span>
           <span class="bg-surface-container-high text-on-surface-variant text-xs font-label px-3 py-1 rounded-full">${p.date}</span>
         </div>
-        <h2 class="text-3xl font-headline font-bold text-white mb-8 hover:text-primary transition-colors">
+        <h2 class="text-2xl md:text-3xl font-headline font-bold text-white mb-8 hover:text-primary transition-colors">
           ${p.title}
         </h2>
         <div class="border-t border-surface-container-highest pt-6 flex justify-between items-center">

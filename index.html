@@ -44,6 +44,44 @@
       overflow: hidden;
     }
 
+    @media (max-width: 767px) {
+      body {
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      #board-container {
+        height: auto !important;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem 1rem 2rem;
+      }
+      .board-item, .main-case-file {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        margin: 0 auto 1rem;
+      }
+      .main-case-file {
+        width: 100% !important;
+        max-width: 400px;
+        padding: 1.5rem !important;
+        margin: 1rem auto;
+      }
+      .main-case-file h1 {
+        font-size: 2rem !important;
+      }
+      .polaroid { width: 90% !important; max-width: 250px; }
+      .post-it { width: 90% !important; max-width: 220px; }
+      .evidence-folder { width: 90% !important; max-width: 220px; }
+      #string-canvas { display: none; }
+      .police-tape-text { display: none; }
+    }
+
     .tactical-grid {
       background-image: 
           linear-gradient(rgba(255, 69, 0, 0.1) 1px, transparent 1px),
@@ -192,18 +230,18 @@
     }
   </style>
 </head>
-<body class="bg-surface relative w-screen h-screen font-body">
+<body class="bg-surface w-screen h-screen font-body overflow-hidden md:overflow-hidden">
 <div class="fixed inset-0 tactical-grid"></div>
 <div class="fixed inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] pointer-events-none z-10"></div>
-<header class="absolute top-0 left-0 w-full z-40 flex justify-center pt-4">
-<nav class="flex gap-2">
-<a class="dossier-tabs bg-[#fdf5c9] text-black font-label px-8 py-2 text-sm font-bold shadow-md hover:bg-white transition-colors" href="index.html">CRIME SCENE</a>
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="field-notes.html">FIELD NOTES</a>
+<header class="absolute top-0 left-0 w-full z-50 flex justify-center pt-4">
+<nav class="flex gap-1 md:gap-2 overflow-x-auto flex-nowrap">
+<a class="dossier-tabs bg-[#fdf5c9] text-black font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap font-bold shadow-md hover:bg-white transition-colors" href="index.html">CRIME SCENE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="field-notes.html">FIELD NOTES</a>
 </nav>
 </header>
-<main class="relative w-full h-full z-20">
+<main class="relative w-full h-full z-20" id="board-container">
 <canvas id="string-canvas"></canvas>
     <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] rotate-[-15deg] z-[11] pointer-events-none overflow-hidden opacity-60">
 <div class="police-tape-text py-2 whitespace-nowrap overflow-hidden flex">

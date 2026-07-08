@@ -97,11 +97,11 @@
 <body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden min-h-screen">
 <div class="scanlines"></div>
 <header class="fixed top-0 left-0 w-full z-50 flex justify-center pt-4">
-<nav class="flex gap-2">
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="index.html">CRIME SCENE</a>
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
-<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-8 py-2 text-sm hover:text-primary transition-colors" href="field-notes.html">FIELD NOTES</a>
+<nav class="flex gap-1 md:gap-2 overflow-x-auto flex-nowrap">
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="index.html">CRIME SCENE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="field-notes.html">FIELD NOTES</a>
 </nav>
 </header>
 
@@ -148,23 +148,23 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <div class="case-paper p-2 h-72 overflow-hidden">
+          <div class="case-paper p-2 h-48 md:h-72 overflow-hidden">
             <img class="ev-img" src="${project.image_url || ''}" alt="${project.name} evidence photo 1" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-on-surface-variant font-label-mono text-xs\\'>EVIDENCE_IMG_A_MISSING</div>'"/>
           </div>
-          <div class="case-paper p-2 h-72 overflow-hidden">
+          <div class="case-paper p-2 h-48 md:h-72 overflow-hidden">
             <img class="ev-img" src="${project.image_url_2 || ''}" alt="${project.name} evidence photo 2" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-on-surface-variant font-label-mono text-xs\\'>EVIDENCE_IMG_B_MISSING</div>'"/>
           </div>
         </div>
 
-        <div class="case-paper p-6 md:p-8 mb-8">
+        <div class="case-paper p-4 md:p-8 mb-8">
           <div class="flex items-center gap-2 mb-4 border-b border-outline-variant pb-2">
             <span class="material-symbols-outlined text-secondary text-sm">description</span>
             <h2 class="font-label-mono text-sm text-secondary uppercase tracking-wider">Case Details</h2>
           </div>
-          <p class="font-body-md text-on-surface-variant leading-relaxed">${project.description || ''}</p>
+          <p class="font-body-md text-on-surface-variant leading-relaxed break-words">${project.description || ''}</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
           <div class="case-paper p-6">
             <div class="flex items-center gap-2 mb-4 border-b border-outline-variant pb-2">
               <span class="material-symbols-outlined text-secondary text-sm">build</span>

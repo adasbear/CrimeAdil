@@ -24,10 +24,11 @@
   .modal { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 24px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
   label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a3a3a3; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
   table { width: 100%; border-collapse: collapse; }
+  th, td { word-break: break-word; }
   th { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a3a3a3; text-transform: uppercase; text-align: left; padding: 8px; border-bottom: 1px solid #2a2a2a; }
   td { padding: 8px; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
   tr:hover td { background: #1f1f1f; }
-  .scrollable { max-height: 60vh; overflow-y: auto; }
+  .scrollable { max-height: 60vh; overflow: auto; }
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: #0e0e0e; }
   ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
@@ -119,7 +120,7 @@
           </div>
           <button class="btn btn-secondary" onclick="authed=false;render()">LOCK</button>
         </div>
-        <div class="flex gap-4 border-b border-surface-container-highest mb-6">
+        <div class="flex gap-4 border-b border-surface-container-highest mb-6 overflow-x-auto">
           <div class="tab ${currentTab==='projects'?'active':''}" onclick="switchTab('projects')">PROJECTS</div>
           <div class="tab ${currentTab==='posts'?'active':''}" onclick="switchTab('posts')">BLOG POSTS</div>
           <div class="tab ${currentTab==='comments'?'active':''}" onclick="switchTab('comments')">COMMENTS</div>
@@ -179,7 +180,7 @@
     overlay.innerHTML = `
       <div class="modal">
         <h2 class="font-headline text-lg text-primary font-bold mb-4">${id ? 'EDIT' : 'ADD'} PROJECT</h2>
-        <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div><label>Name</label><input class="input" id="f-name" value="${project.name.replace(/"/g,'&quot;')}"/></div>
           <div><label>Codename</label><input class="input" id="f-codename" value="${project.codename.replace(/"/g,'&quot;')}"/></div>
           <div class="col-span-2"><label>Tagline</label><input class="input" id="f-tagline" value="${(project.tagline||'').replace(/"/g,'&quot;')}"/></div>
