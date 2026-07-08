@@ -3,7 +3,14 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Field Notes - Classified Archives</title>
+<link rel="icon" type="image/png" href="fav.png"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  const SUPABASE_URL = 'https://njaabydjhwxpgscytxso.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qYWFieWRqaHd4cGdzY3l0eHNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0NDI1NzQsImV4cCI6MjA5OTAxODU3NH0.Ak5tTtJ1v3iVGCgbphAoW2HzZkjUoEmFg_iJZJsgn-A';
+  const sbHeaders = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Accept': 'application/json' };
+  async function sbGet(table, query) { const r = await fetch(SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : ''), { headers: sbHeaders }); return r.json(); }
+</script>
 <script data-purpose="tailwind-config">
     tailwind.config = {
       darkMode: 'class',
@@ -143,44 +150,7 @@
 </div>
 </section>
 <main class="container mx-auto px-4 md:px-8 max-w-4xl pb-24 relative z-20">
-<section class="flex flex-col gap-6" data-purpose="field-notes-list">
-<article class="tactical-card rounded-xl p-8 reveal cursor-pointer" onclick="window.location.href='blog-post.html?id=0'">
-<div class="flex items-center gap-4 mb-6">
-<span class="border border-primary/50 text-primary text-xs font-bold px-3 py-1 rounded-full bg-orange-950/20 tracking-wider font-label">CLASSIFIED</span>
-<span class="bg-surface-container-high text-on-surface-variant text-xs font-label px-3 py-1 rounded-full">4/21/2026</span>
-</div>
-<h2 class="text-3xl font-headline font-bold text-white mb-8 hover:text-primary transition-colors">
-          Why localization is not always the answer
-        </h2>
-<div class="border-t border-surface-container-highest pt-6 flex justify-between items-center">
-<div class="flex items-center gap-2 font-label text-xs text-on-surface-variant">
-<span class="status-dot"></span>
-<span>0 VIEWS</span>
-</div>
-<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-white px-4 py-2 rounded font-label text-xs tracking-wider transition-colors flex items-center gap-2" onclick="event.stopPropagation(); window.location.href='blog-post.html?id=0'">
-            EXTRACT INTEL <span class="text-primary">→</span>
-</button>
-</div>
-</article>
-<article class="tactical-card rounded-xl p-8 reveal cursor-pointer" onclick="window.location.href='blog-post.html?id=1'">
-<div class="flex items-center gap-4 mb-6">
-<span class="border border-primary/50 text-primary text-xs font-bold px-3 py-1 rounded-full bg-orange-950/20 tracking-wider font-label">CLASSIFIED</span>
-<span class="bg-surface-container-high text-on-surface-variant text-xs font-label px-3 py-1 rounded-full">4/10/2026</span>
-</div>
-<h2 class="text-3xl font-headline font-bold text-white mb-8 hover:text-primary transition-colors">
-          Why developers make a sh*t ton of money
-        </h2>
-<div class="border-t border-surface-container-highest pt-6 flex justify-between items-center">
-<div class="flex items-center gap-2 font-label text-xs text-on-surface-variant">
-<span class="status-dot"></span>
-<span>1364 VIEWS</span>
-</div>
-<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-white px-4 py-2 rounded font-label text-xs tracking-wider transition-colors flex items-center gap-2" onclick="event.stopPropagation(); window.location.href='blog-post.html?id=1'">
-            EXTRACT INTEL <span class="text-primary">→</span>
-</button>
-</div>
-</article>
-</section>
+<section class="flex flex-col gap-6" data-purpose="field-notes-list" id="posts-list"></section>
 </main>
 <style data-purpose="animations">
     @keyframes marquee {
@@ -211,6 +181,38 @@
     .reveal:nth-child(3) { transition-delay: 0.3s; }
   </style>
 <script>
+  async function loadPosts() {
+    const data = await sbGet('blog_posts', 'select=*&order=id');
+    const list = document.getElementById('posts-list');
+    if (!list) return;
+    if (!data || data.length === 0) {
+      list.innerHTML = '<p class="text-center text-on-surface-variant font-label py-16">No field notes found.</p>';
+      return;
+    }
+    list.innerHTML = data.map(p => `
+      <article class="tactical-card rounded-xl p-8 reveal cursor-pointer" onclick="window.location.href='blog-post.html?id=${p.id}'">
+        <div class="flex items-center gap-4 mb-6">
+          <span class="border border-primary/50 text-primary text-xs font-bold px-3 py-1 rounded-full bg-orange-950/20 tracking-wider font-label">CLASSIFIED</span>
+          <span class="bg-surface-container-high text-on-surface-variant text-xs font-label px-3 py-1 rounded-full">${p.date}</span>
+        </div>
+        <h2 class="text-3xl font-headline font-bold text-white mb-8 hover:text-primary transition-colors">
+          ${p.title}
+        </h2>
+        <div class="border-t border-surface-container-highest pt-6 flex justify-between items-center">
+          <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant">
+            <span class="status-dot"></span>
+            <span>${p.views || 0} VIEWS</span>
+          </div>
+          <button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-white px-4 py-2 rounded font-label text-xs tracking-wider transition-colors flex items-center gap-2" onclick="event.stopPropagation(); window.location.href='blog-post.html?id=${p.id}'">
+            EXTRACT INTEL <span class="text-primary">→</span>
+          </button>
+        </div>
+      </article>
+    `).join('');
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -218,8 +220,9 @@
       }
     });
   }, { threshold: 0.1 });
+
   setTimeout(() => {
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    loadPosts();
   }, 100);
 </script>
 </body></html>

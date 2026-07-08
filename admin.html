@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ADMIN PANEL - CLASSIFIED</title>
+<link rel="icon" type="image/png" href="fav.png"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  body { background: #0e0e0e; color: #e5e2e1; font-family: 'Geist', sans-serif; }
+  .card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; }
+  .input { background: #0e0e0e; border: 1px solid #333; color: #e5e2e1; padding: 8px 12px; border-radius: 4px; outline: none; width: 100%; }
+  .input:focus { border-color: #ff4500; }
+  .input::placeholder { color: #5d4038; }
+  .btn { padding: 8px 16px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer; border: none; transition: opacity 0.2s; }
+  .btn:hover { opacity: 0.8; }
+  .btn-primary { background: #ff4500; color: #000; }
+  .btn-danger { background: #cc0000; color: #fff; }
+  .btn-secondary { background: #2a2a2a; color: #e5e2e1; }
+  .tab { padding: 8px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab.active { border-bottom-color: #ff4500; color: #ff4500; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 24px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
+  label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a3a3a3; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a3a3a3; text-transform: uppercase; text-align: left; padding: 8px; border-bottom: 1px solid #2a2a2a; }
+  td { padding: 8px; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
+  tr:hover td { background: #1f1f1f; }
+  .scrollable { max-height: 60vh; overflow-y: auto; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0e0e0e; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  .tag { display: inline-block; background: #ff4500; color: #000; font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 2px; margin: 2px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+  const SUPABASE_URL = 'https://njaabydjhwxpgscytxso.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qYWFieWRqaHd4cGdzY3l0eHNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0NDI1NzQsImV4cCI6MjA5OTAxODU3NH0.Ak5tTtJ1v3iVGCgbphAoW2HzZkjUoEmFg_iJZJsgn-A';
+  const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json', 'Accept': 'application/json' };
+
+  async function sbGet(table, query) {
+    const url = SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : '');
+    const res = await fetch(url, { headers });
+    return res.json();
+  }
+
+  async function sbGetSingle(table, query) {
+    const h = { ...headers, 'Accept': 'application/vnd.pgrst.object+json' };
+    const url = SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : '');
+    const res = await fetch(url, { headers: h });
+    if (!res.ok) return null;
+    return res.json();
+  }
+
+  async function sbPost(table, body) {
+    const url = SUPABASE_URL + '/rest/v1/' + table;
+    await fetch(url, { method: 'POST', headers: { ...headers, 'Prefer': 'return=representation' }, body: JSON.stringify(body) });
+  }
+
+  async function sbPatch(table, query, body) {
+    const url = SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : '');
+    await fetch(url, { method: 'PATCH', headers: { ...headers, 'Prefer': 'return=representation' }, body: JSON.stringify(body) });
+  }
+
+  async function sbDelete(table, query) {
+    const url = SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : '');
+    await fetch(url, { method: 'DELETE', headers });
+  }
+
+  let authed = false;
+  let currentTab = 'projects';
+
+  const app = document.getElementById('app');
+
+  function render() {
+    if (!authed) { renderLogin(); return; }
+    renderDashboard();
+  }
+
+  function renderLogin() {
+    app.innerHTML = `
+      <div class="flex items-center justify-center min-h-screen">
+        <div class="card p-8 w-full max-w-sm">
+          <div class="text-center mb-6">
+            <div class="w-3 h-3 rounded-full bg-[#ff4500] shadow-[0_0_8px_rgba(255,69,0,0.8)] mx-auto mb-4"></div>
+            <h1 class="font-headline text-2xl text-primary font-bold uppercase tracking-wider">Classified Access</h1>
+            <p class="font-label text-xs text-on-surface-variant mt-2">ENTER CLEARANCE CODE</p>
+          </div>
+          <input type="password" id="pwd" class="input mb-4" placeholder="Password..." onkeydown="if(event.key==='Enter') login()"/>
+          <div id="login-error" class="text-red-500 text-xs font-label mb-2 hidden">Invalid password</div>
+          <button class="btn btn-primary w-full" onclick="login()">AUTHENTICATE</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('pwd').focus();
+  }
+
+  async function login() {
+    const pwd = document.getElementById('pwd').value;
+    const data = await sbGetSingle('admin_settings', 'key=eq.password&select=value');
+    if (data && data.value === pwd) {
+      authed = true;
+      render();
+    } else {
+      document.getElementById('login-error').classList.remove('hidden');
+    }
+  }
+
+  function renderDashboard() {
+    app.innerHTML = `
+      <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h1 class="font-headline text-2xl text-primary font-bold uppercase tracking-wider">Admin Panel</h1>
+            <p class="font-label text-xs text-on-surface-variant">MANAGE PROJECTS & CONTENT</p>
+          </div>
+          <button class="btn btn-secondary" onclick="authed=false;render()">LOCK</button>
+        </div>
+        <div class="flex gap-4 border-b border-surface-container-highest mb-6">
+          <div class="tab ${currentTab==='projects'?'active':''}" onclick="switchTab('projects')">PROJECTS</div>
+          <div class="tab ${currentTab==='posts'?'active':''}" onclick="switchTab('posts')">BLOG POSTS</div>
+          <div class="tab ${currentTab==='comments'?'active':''}" onclick="switchTab('comments')">COMMENTS</div>
+        </div>
+        <div id="tab-content"></div>
+      </div>
+    `;
+    loadTab();
+  }
+
+  function switchTab(tab) {
+    currentTab = tab;
+    renderDashboard();
+  }
+
+  function loadTab() {
+    if (currentTab === 'projects') loadProjects();
+    else if (currentTab === 'posts') loadPosts();
+    else if (currentTab === 'comments') loadComments();
+  }
+
+  async function loadProjects() {
+    const data = await sbGet('projects', 'select=*&order=display_order');
+    const tc = document.getElementById('tab-content');
+    tc.innerHTML = `
+      <button class="btn btn-primary mb-4" onclick="showProjectModal()">+ ADD PROJECT</button>
+      <div class="scrollable">
+        <table>
+          <thead><tr><th>Order</th><th>Name</th><th>Codename</th><th>Status</th><th>Severity</th><th>Actions</th></tr></thead>
+          <tbody>${(data||[]).map(p => `
+            <tr>
+              <td>${p.display_order}</td>
+              <td class="font-bold">${p.name}</td>
+              <td class="text-on-surface-variant">${p.codename}</td>
+              <td><span class="tag">${p.status}</span></td>
+              <td>${p.severity}</td>
+              <td>
+                <button class="btn btn-secondary btn-sm mr-1" onclick="showProjectModal(${p.id})">EDIT</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteProject(${p.id})">DEL</button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  async function showProjectModal(id) {
+    let project = { name:'', codename:'', tagline:'', tech_stack:[], status:'ACTIVE', severity:'MEDIUM', exhibit_label:'', image_url:'', image_url_2:'', description:'', github_url:'', live_url:'', display_order:0 };
+    if (id) {
+      const data = await sbGetSingle('projects', 'id=eq.' + id + '&select=*');
+      if (data) project = data;
+    }
+    const techStr = (project.tech_stack||[]).join(', ');
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+      <div class="modal">
+        <h2 class="font-headline text-lg text-primary font-bold mb-4">${id ? 'EDIT' : 'ADD'} PROJECT</h2>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div><label>Name</label><input class="input" id="f-name" value="${project.name.replace(/"/g,'&quot;')}"/></div>
+          <div><label>Codename</label><input class="input" id="f-codename" value="${project.codename.replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>Tagline</label><input class="input" id="f-tagline" value="${(project.tagline||'').replace(/"/g,'&quot;')}"/></div>
+          <div><label>Status</label><select class="input" id="f-status"><option ${project.status==='ACTIVE'?'selected':''}>ACTIVE</option><option ${project.status==='PENDING'?'selected':''}>PENDING</option><option ${project.status==='CLOSED'?'selected':''}>CLOSED</option></select></div>
+          <div><label>Severity</label><select class="input" id="f-severity"><option ${project.severity==='CRITICAL'?'selected':''}>CRITICAL</option><option ${project.severity==='HIGH'?'selected':''}>HIGH</option><option ${project.severity==='MEDIUM'?'selected':''}>MEDIUM</option></select></div>
+          <div><label>Exhibit Label</label><input class="input" id="f-exhibit" value="${(project.exhibit_label||'').replace(/"/g,'&quot;')}"/></div>
+          <div><label>Display Order</label><input class="input" id="f-order" type="number" value="${project.display_order}"/></div>
+          <div class="col-span-2"><label>Tech Stack (comma separated)</label><input class="input" id="f-tech" value="${techStr.replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>Image URL 1</label><input class="input" id="f-img1" value="${(project.image_url||'').replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>Image URL 2</label><input class="input" id="f-img2" value="${(project.image_url_2||'').replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>GitHub URL</label><input class="input" id="f-github" value="${(project.github_url||'').replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>Live URL</label><input class="input" id="f-live" value="${(project.live_url||'').replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>Description</label><textarea class="input" id="f-desc" rows="4">${(project.description||'').replace(/</g,'&lt;')}</textarea></div>
+        </div>
+        <div class="flex gap-2 justify-end">
+          <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">CANCEL</button>
+          <button class="btn btn-primary" onclick="saveProject(${id||'null'})">SAVE</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+
+  window.saveProject = async function(id) {
+    const data = {
+      name: document.getElementById('f-name').value,
+      codename: document.getElementById('f-codename').value,
+      tagline: document.getElementById('f-tagline').value,
+      status: document.getElementById('f-status').value,
+      severity: document.getElementById('f-severity').value,
+      exhibit_label: document.getElementById('f-exhibit').value,
+      display_order: parseInt(document.getElementById('f-order').value) || 0,
+      tech_stack: document.getElementById('f-tech').value.split(',').map(s => s.trim()).filter(Boolean),
+      image_url: document.getElementById('f-img1').value,
+      image_url_2: document.getElementById('f-img2').value,
+      github_url: document.getElementById('f-github').value,
+      live_url: document.getElementById('f-live').value,
+      description: document.getElementById('f-desc').value
+    };
+    if (id) await sbPatch('projects', 'id=eq.' + id, data);
+    else await sbPost('projects', data);
+    document.querySelector('.modal-overlay').remove();
+    loadProjects();
+  };
+
+  window.deleteProject = async function(id) {
+    if (!confirm('Delete this project?')) return;
+    await sbDelete('projects', 'id=eq.' + id);
+    loadProjects();
+  };
+
+  async function loadPosts() {
+    const data = await sbGet('blog_posts', 'select=*&order=id');
+    const tc = document.getElementById('tab-content');
+    tc.innerHTML = `
+      <button class="btn btn-primary mb-4" onclick="showPostModal()">+ ADD POST</button>
+      <div class="scrollable">
+        <table>
+          <thead><tr><th>ID</th><th>Title</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody>${(data||[]).map(p => `
+            <tr>
+              <td>${p.id}</td>
+              <td class="font-bold">${p.title}</td>
+              <td class="text-on-surface-variant">${p.date}</td>
+              <td>
+                <button class="btn btn-secondary btn-sm mr-1" onclick="showPostModal(${p.id})">EDIT</button>
+                <button class="btn btn-danger btn-sm" onclick="deletePost(${p.id})">DEL</button>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  async function showPostModal(id) {
+    let post = { title:'', date:'', content:'' };
+    if (id) {
+      const data = await sbGetSingle('blog_posts', 'id=eq.' + id + '&select=*');
+      if (data) post = data;
+    }
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+      <div class="modal">
+        <h2 class="font-headline text-lg text-primary font-bold mb-4">${id ? 'EDIT' : 'ADD'} POST</h2>
+        <div class="space-y-4 mb-4">
+          <div><label>Title</label><input class="input" id="p-title" value="${post.title.replace(/"/g,'&quot;')}"/></div>
+          <div><label>Date</label><input class="input" id="p-date" value="${post.date}"/></div>
+          <div><label>Content (HTML)</label><textarea class="input" id="p-content" rows="10">${(post.content||'').replace(/</g,'&lt;')}</textarea></div>
+        </div>
+        <div class="flex gap-2 justify-end">
+          <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">CANCEL</button>
+          <button class="btn btn-primary" onclick="savePost(${id||'null'})">SAVE</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+
+  window.savePost = async function(id) {
+    const data = {
+      title: document.getElementById('p-title').value,
+      date: document.getElementById('p-date').value,
+      content: document.getElementById('p-content').value
+    };
+    if (id) await sbPatch('blog_posts', 'id=eq.' + id, data);
+    else await sbPost('blog_posts', data);
+    document.querySelector('.modal-overlay').remove();
+    loadPosts();
+  };
+
+  window.deletePost = async function(id) {
+    if (!confirm('Delete this post and all its comments?')) return;
+    await sbDelete('comments', 'post_id=eq.' + id);
+    await sbDelete('likes', 'post_id=eq.' + id);
+    await sbDelete('blog_posts', 'id=eq.' + id);
+    loadPosts();
+  };
+
+  async function loadComments() {
+    const data = await sbGet('comments', 'select=*,blog_posts(title)&order=id.desc&limit=50');
+    const tc = document.getElementById('tab-content');
+    tc.innerHTML = `
+      <div class="scrollable">
+        ${!data || data.length === 0 ? '<p class="text-on-surface-variant font-label text-sm">No comments yet.</p>' : `
+        <table>
+          <thead><tr><th>Post</th><th>Author</th><th>Comment</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody>${data.map(c => `
+            <tr>
+              <td class="text-on-surface-variant text-xs">${c.blog_posts?.title || 'Unknown'}</td>
+              <td>${c.author}</td>
+              <td class="text-sm">${c.text}</td>
+              <td class="text-on-surface-variant text-xs">${new Date(c.created_at).toLocaleDateString()}</td>
+              <td><button class="btn btn-danger btn-sm" onclick="deleteComment(${c.id})">DEL</button></td>
+            </tr>
+          `).join('')}</tbody>
+        </table>`}
+      </div>
+    `;
+  }
+
+  window.deleteComment = async function(id) {
+    if (!confirm('Delete this comment?')) return;
+    await sbDelete('comments', 'id=eq.' + id);
+    loadComments();
+  };
+
+  render();
+</script>
+</body></html>

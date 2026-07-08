@@ -3,9 +3,18 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Field Note - Classified Archives</title>
+<link rel="icon" type="image/png" href="fav.png"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script>
-    tailwind.config = {
+  const SUPABASE_URL = 'https://njaabydjhwxpgscytxso.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qYWFieWRqaHd4cGdzY3l0eHNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0NDI1NzQsImV4cCI6MjA5OTAxODU3NH0.Ak5tTtJ1v3iVGCgbphAoW2HzZkjUoEmFg_iJZJsgn-A';
+  const sbHeaders = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Accept': 'application/json', 'Content-Type': 'application/json' };
+  async function sbGet(table, query) { const r = await fetch(SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : ''), { headers: sbHeaders }); return r.json(); }
+  async function sbGetSingle(table, query) { const h = { ...sbHeaders, 'Accept': 'application/vnd.pgrst.object+json' }; const r = await fetch(SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : ''), { headers: h }); if (!r.ok) return null; return r.json(); }
+  async function sbPost(table, body) { await fetch(SUPABASE_URL + '/rest/v1/' + table, { method: 'POST', headers: { ...sbHeaders, 'Prefer': 'return=representation' }, body: JSON.stringify(body) }); }
+  async function sbPatch(table, query, body) { await fetch(SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : ''), { method: 'PATCH', headers: { ...sbHeaders, 'Prefer': 'return=representation' }, body: JSON.stringify(body) }); }
+
+  tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
@@ -95,127 +104,109 @@
 </main>
 
 <script>
-  const posts = {
-    0: {
-      title: "Why localization is not always the answer",
-      date: "4/21/2026",
-      content: `
-        <p class="mb-6 leading-relaxed">In the world of software development, localization is often presented as the gold standard for reaching global audiences. Translate the UI, adapt the formats, and you're done. But in practice, localization introduces a host of complexities that can outweigh its benefits.</p>
-        <p class="mb-6 leading-relaxed">Every language has its own idiosyncrasies. Text expansion in German can break layouts. Right-to-left languages require complete UI mirroring. Date formats, currency symbols, and measurement units vary wildly — and each one is a potential bug.</p>
-        <p class="mb-6 leading-relaxed">The cost of maintaining localized content at scale grows linearly with every language you add. Translation management, cultural adaptation, and region-specific compliance create an operational burden that many teams underestimate.</p>
-        <p class="mb-6 leading-relaxed">Sometimes, the smarter play is to focus on English-first with a clean, minimal interface that's easy to understand globally. Not every product needs to speak every language. Know when localization adds value — and when it just adds complexity.</p>
-        <p class="text-on-surface-variant italic">— Field Operative, Fullstack Division</p>
-      `
-    },
-    1: {
-      title: "Why developers make a sh*t ton of money",
-      date: "4/10/2026",
-      content: `
-        <p class="mb-6 leading-relaxed">Let's cut through the noise. Developers are paid well because the gap between demand and supply is massive — and the leverage a single developer has over a business is enormous.</p>
-        <p class="mb-6 leading-relaxed">A single line of code can automate thousands of hours of manual labor. A well-architected system can scale to millions of users. One developer's decision can save — or cost — a company millions. That level of leverage commands high compensation.</p>
-        <p class="mb-6 leading-relaxed">Beyond leverage, the barrier to entry is real. Not everyone can think in abstractions, debug distributed systems at 2 AM, or keep up with a landscape that changes every six months. The ones who can are rare.</p>
-        <p class="mb-6 leading-relaxed">So yes, developers make a lot of money. But it's not because of entitlement. It's because the value they create — and the scarcity of that skillset — earns it. If you can build things that work at scale, you set your own price.</p>
-        <p class="text-on-surface-variant italic">— Field Operative, Fullstack Division</p>
-      `
-    }
-  };
+  let currentPostId = null;
 
   function getPostId() {
-    return new URLSearchParams(window.location.search).get('id') || '0';
+    return parseInt(new URLSearchParams(window.location.search).get('id'));
   }
 
-  function renderPost(id) {
-    const post = posts[id];
+  async function loadPost() {
+    const id = getPostId();
+    if (!id) {
+      document.getElementById('post-content').innerHTML = '<p class="text-center py-32 font-label text-on-surface-variant">FIELD NOTE NOT FOUND</p>';
+      return;
+    }
+    currentPostId = id;
+
+    const post = await sbGetSingle('blog_posts', 'id=eq.' + id + '&select=*');
     if (!post) {
       document.getElementById('post-content').innerHTML = '<p class="text-center py-32 font-label text-on-surface-variant">FIELD NOTE NOT FOUND</p>';
       return;
     }
 
-    document.title = `${post.title} - Field Note`;
+    document.title = post.title + ' - Field Note';
 
-    const storageKey = `blog_${id}`;
-    const data = JSON.parse(localStorage.getItem(storageKey) || '{"liked": false, "likes": 0, "comments": []}');
+    await sbPatch('blog_posts', 'id=eq.' + id, { views: (post.views || 0) + 1 });
 
-    function render() {
-      const likeIcon = data.liked ? 'favorite' : 'favorite_border';
-      const likeClass = data.liked ? 'liked' : '';
+    const comments = await sbGet('comments', 'select=*&post_id=eq.' + id + '&order=created_at');
+    const likesData = await sbGetSingle('likes', 'post_id=eq.' + id + '&select=count');
+    const likeCount = likesData?.count || 0;
 
-      const commentsHtml = data.comments.length === 0
-        ? '<p class="text-on-surface-variant text-sm font-label">No intel reports yet. Be the first.</p>'
-        : data.comments.map(c =>
-            `<div class="border-b border-surface-container-highest pb-4">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="w-2 h-2 rounded-full bg-primary"></span>
-                <span class="font-label text-xs text-primary">ANON_AGENT</span>
-                <span class="font-label text-[10px] text-on-surface-variant">${c.time}</span>
-              </div>
-              <p class="font-body text-sm text-on-surface ml-4">${c.text}</p>
-            </div>`
-          ).join('');
+    const commentsHtml = !comments || comments.length === 0
+      ? '<p class="text-on-surface-variant text-sm font-label">No intel reports yet. Be the first.</p>'
+      : comments.map(c =>
+          `<div class="border-b border-surface-container-highest pb-4">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 rounded-full bg-primary"></span>
+              <span class="font-label text-xs text-primary">${c.author || 'ANON_AGENT'}</span>
+              <span class="font-label text-[10px] text-on-surface-variant">${new Date(c.created_at).toLocaleString()}</span>
+            </div>
+            <p class="font-body text-sm text-on-surface ml-4">${c.text}</p>
+          </div>`
+        ).join('');
 
-      document.getElementById('post-content').innerHTML = `
-        <a href="field-notes.html" class="font-label text-xs text-on-surface-variant hover:text-primary transition-colors">&larr; BACK TO FIELD NOTES</a>
-        <article class="tactical-card rounded-xl p-8 mt-4">
-          <div class="flex items-center gap-4 mb-6">
-            <span class="border border-primary/50 text-primary text-xs font-bold px-3 py-1 rounded-full bg-orange-950/20 tracking-wider font-label">CLASSIFIED</span>
-            <span class="bg-surface-container-high text-on-surface-variant text-xs font-label px-3 py-1 rounded-full">${post.date}</span>
-          </div>
-          <h1 class="text-3xl md:text-4xl font-headline font-bold text-white mb-8">${post.title}</h1>
-          <div class="font-body text-base text-on-surface leading-relaxed">${post.content}</div>
-        </article>
-
-        <div class="tactical-card rounded-xl p-6 mt-6">
-          <div class="flex items-center gap-3 mb-4">
-            <button class="like-btn flex items-center gap-2 ${likeClass}" onclick="toggleLike()">
-              <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' ${data.liked ? 1 : 0}">${likeIcon}</span>
-              <span class="font-label text-sm" id="like-count">${data.likes}</span>
-            </button>
-            <span class="text-on-surface-variant font-label text-xs">INTEL RATING</span>
-          </div>
+    document.getElementById('post-content').innerHTML = `
+      <a href="field-notes.html" class="font-label text-xs text-on-surface-variant hover:text-primary transition-colors">&larr; BACK TO FIELD NOTES</a>
+      <article class="tactical-card rounded-xl p-8 mt-4">
+        <div class="flex items-center gap-4 mb-6">
+          <span class="border border-primary/50 text-primary text-xs font-bold px-3 py-1 rounded-full bg-orange-950/20 tracking-wider font-label">CLASSIFIED</span>
+          <span class="bg-surface-container-high text-on-surface-variant text-xs font-label px-3 py-1 rounded-full">${post.date}</span>
         </div>
+        <h1 class="text-3xl md:text-4xl font-headline font-bold text-white mb-8">${post.title}</h1>
+        <div class="font-body text-base text-on-surface leading-relaxed">${post.content}</div>
+      </article>
 
-        <div class="tactical-card rounded-xl p-6 mt-6">
-          <h2 class="font-label text-sm text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">forum</span>
-            INTEL REPORTS (${data.comments.length})
-          </h2>
-          <div class="space-y-4 mb-6" id="comments-section">
-            ${commentsHtml}
-          </div>
-          <div class="flex gap-2">
-            <input type="text" id="comment-input" class="comment-input flex-grow px-4 py-2 font-label text-sm rounded" placeholder="Submit intel report..." maxlength="500"/>
-            <button class="bg-primary text-on-primary font-label text-sm px-4 py-2 hover:opacity-80 transition-opacity" onclick="addComment()">SEND</button>
-          </div>
+      <div class="tactical-card rounded-xl p-6 mt-6">
+        <div class="flex items-center gap-3 mb-4">
+          <button class="like-btn flex items-center gap-2" onclick="toggleLike(${id})">
+            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0">favorite_border</span>
+            <span class="font-label text-sm" id="like-count">${likeCount}</span>
+          </button>
+          <span class="text-on-surface-variant font-label text-xs">INTEL RATING</span>
         </div>
-      `;
-    }
+      </div>
 
-    window.toggleLike = function() {
-      data.liked = !data.liked;
-      data.likes += data.liked ? 1 : -1;
-      localStorage.setItem(storageKey, JSON.stringify(data));
-      render();
-    };
-
-    window.addComment = function() {
-      const input = document.getElementById('comment-input');
-      const text = input.value.trim();
-      if (!text) return;
-      const now = new Date();
-      const time = now.toLocaleString();
-      data.comments.push({ text, time });
-      localStorage.setItem(storageKey, JSON.stringify(data));
-      input.value = '';
-      render();
-    };
-
-    render();
+      <div class="tactical-card rounded-xl p-6 mt-6">
+        <h2 class="font-label text-sm text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">forum</span>
+          INTEL REPORTS (${(comments||[]).length})
+        </h2>
+        <div class="space-y-4 mb-6" id="comments-section">
+          ${commentsHtml}
+        </div>
+        <div class="flex gap-2">
+          <input type="text" id="comment-author" class="comment-input w-1/3 px-4 py-2 font-label text-sm rounded" placeholder="Your callsign..." maxlength="50"/>
+          <input type="text" id="comment-input" class="comment-input flex-grow px-4 py-2 font-label text-sm rounded" placeholder="Submit intel report..." maxlength="500"/>
+          <button class="bg-primary text-on-primary font-label text-sm px-4 py-2 hover:opacity-80 transition-opacity" onclick="addComment(${id})">SEND</button>
+        </div>
+      </div>
+    `;
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const id = getPostId();
-    renderPost(id);
-  });
+  window.toggleLike = async function(postId) {
+    const existing = await sbGetSingle('likes', 'post_id=eq.' + postId + '&select=*');
+    if (existing) {
+      await sbPatch('likes', 'post_id=eq.' + postId, { count: existing.count + 1 });
+    } else {
+      await sbPost('likes', { post_id: postId, count: 1 });
+    }
+    const updated = await sbGetSingle('likes', 'post_id=eq.' + postId + '&select=count');
+    document.getElementById('like-count').textContent = updated?.count || 0;
+  };
+
+  window.addComment = async function(postId) {
+    const input = document.getElementById('comment-input');
+    const authorInput = document.getElementById('comment-author');
+    const text = input.value.trim();
+    const author = authorInput.value.trim() || 'ANON_AGENT';
+    if (!text) return;
+    await sbPost('comments', { post_id: postId, text, author });
+    input.value = '';
+    authorInput.value = '';
+    loadPost();
+  };
+
+  document.addEventListener('DOMContentLoaded', loadPost);
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 </body></html>

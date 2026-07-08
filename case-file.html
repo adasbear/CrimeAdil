@@ -3,9 +3,16 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Case File - ADIL_ARARSA_INVESTIGATIONS</title>
+<link rel="icon" type="image/png" href="fav.png"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script>
-    tailwind.config = {
+  const SUPABASE_URL = 'https://njaabydjhwxpgscytxso.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qYWFieWRqaHd4cGdzY3l0eHNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0NDI1NzQsImV4cCI6MjA5OTAxODU3NH0.Ak5tTtJ1v3iVGCgbphAoW2HzZkjUoEmFg_iJZJsgn-A';
+  const sbHeaders = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Accept': 'application/json', 'Content-Type': 'application/json' };
+  async function sbGet(table, query) { const r = await fetch(SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : ''), { headers: sbHeaders }); return r.json(); }
+  async function sbGetSingle(table, query) { const h = { ...sbHeaders, 'Accept': 'application/vnd.pgrst.object+json' }; const r = await fetch(SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : ''), { headers: h }); if (!r.ok) return null; return r.json(); }
+
+  tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
@@ -105,72 +112,15 @@
 </main>
 
 <script>
-  const projects = {
-    omega: {
-      name: "PROJECT OMEGA",
-      tagline: "Fullstack Streaming Platform",
-      tech: ["React", "Node.js", "PostgreSQL"],
-      status: "ACTIVE",
-      severity: "CRITICAL",
-      description: "A fullstack streaming platform capable of handling millions of concurrent users. Features real-time content delivery, personalized recommendation engine, and adaptive bitrate streaming. Built with a microservices architecture for maximum scalability.",
-      images: [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAnSxIRAefH0x4DsitrkT8S7WHc5khkzz8soJPJdx5Mq7177TBH90MJsZpytHI5Ccvr40OQ_s0CJ7Hmu0yn5JgYOqIA70LqwzbH9Ca33SF1URrwdPJk6WCpTwCRvKyBvAT1rer2g8HkfQXORdHNAMOZR2XCNvpaIG92UBbllxwAyAFPvJ2lk8E0zzSlPFzUOWuH5djg0hBydUt6_Kd0IazTik9UNTeqM1mPkS_MrwrOd9t38-FgOS3hSw",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCv0NDij326wbtLIqpLirF23KZMESzTbWT5QP2qnip2oFJ7GPOULpJBa2MiTwKbQaWDzV1Mvc64sg5WoDFyZOahp_bk676i_hFzM7Bhwc4Yy9ccyO7fNbG5c6TxbM5VcYauCsllglpGhT3qaXKN1wCYaN6OHJpOH1v8Rc21GW7MLFPszD_Bev_pgjMsQZmHJpWkDENTaEk_Tz2aBy2PaeGDJfvwQcbOBXjZq6yxk_gpi-0-1t3n41N9zg"
-      ],
-      github: "https://github.com/placeholder-omega",
-      live: "https://placeholder-omega.vercel.app"
-    },
-    synapse: {
-      name: "THE SYNAPSE",
-      tagline: "AI Chat Interface",
-      tech: ["Python", "FastAPI", "OpenAI"],
-      status: "ACTIVE",
-      severity: "HIGH",
-      description: "An advanced AI chat interface leveraging large language models for natural conversation. Features context-aware responses, multi-turn dialogue management, and integration with external knowledge bases. Designed for low-latency inference at scale.",
-      images: [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCDc1kAaKusQptnLwSPEv-QqSpAa38BJ6y6_vjHPEPTSK-WDaA1E4CmWfyX1qWAo0AOMmV0L0KKwnK9jP3gA0eRKe_m_y1lgIKyb42q3RRKMBiCaYAtm0S2vDQpnR-PkIgbiDvIQFJIN1E8nTwJkFtQ9VfQu3LaqjDgx1cGBUHcKw6NHH8_SlCK0RxTxI-KCqZzOejPDPJU072ux3l4iBKEIfWGM5NMrSXmnWdWT-WJ3BhWw0bi4YT1TQ",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCyNsMK3iXnr3QqswNwaG9iaIMxcttFVfMYd31feFdP7pklNe43RiozTyd_Fe1ko2qZ29r6taKBaEEdAFUHCeugNQatoQSCwmDTLkN4ebKgm-XYDi5q8NP8OqCU_3ha0Rp742ozz6LHNF9SE_tDSSsK5hTFLDKdzibzOPgWIYd0WPPmzut3Rzgj6bL0cUqEQIbtHhGYzTLKD13AegP-rXsi0IKzt-1eWCa9XuZTFch0lB4dwHM3pZ7ocg"
-      ],
-      github: "https://github.com/placeholder-synapse",
-      live: "https://placeholder-synapse.vercel.app"
-    },
-    ghost: {
-      name: "GHOST PROTOCOL",
-      tagline: "Real-time Collaboration Hub",
-      tech: ["Next.js", "TypeScript", "Prisma"],
-      status: "PENDING",
-      severity: "CRITICAL",
-      description: "A real-time collaboration platform enabling simultaneous editing, communication, and project management. Features end-to-end encryption, WebSocket-based live sync, and role-based access control. Built for remote teams operating in high-security environments.",
-      images: [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCv0NDij326wbtLIqpLirF23KZMESzTbWT5QP2qnip2oFJ7GPOULpJBa2MiTwKbQaWDzV1Mvc64sg5WoDFyZOahp_bk676i_hFzM7Bhwc4Yy9ccyO7fNbG5c6TxbM5VcYauCsllglpGhT3qaXKN1wCYaN6OHJpOH1v8Rc21GW7MLFPszD_Bev_pgjMsQZmHJpWkDENTaEk_Tz2aBy2PaeGDJfvwQcbOBXjZq6yxk_gpi-0-1t3n41N9zg",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAnSxIRAefH0x4DsitrkT8S7WHc5khkzz8soJPJdx5Mq7177TBH90MJsZpytHI5Ccvr40OQ_s0CJ7Hmu0yn5JgYOqIA70LqwzbH9Ca33SF1URrwdPJk6WCpTwCRvKyBvAT1rer2g8HkfQXORdHNAMOZR2XCNvpaIG92UBbllxwAyAFPvJ2lk8E0zzSlPFzUOWuH5djg0hBydUt6_Kd0IazTik9UNTeqM1mPkS_MrwrOd9t38-FgOS3hSw"
-      ],
-      github: "https://github.com/placeholder-ghost",
-      live: "https://placeholder-ghost.vercel.app"
-    },
-    cipher: {
-      name: "CIPHER HOUND",
-      tagline: "Cybersecurity Dashboard",
-      tech: ["React", "Tailwind CSS"],
-      status: "CLOSED",
-      severity: "MEDIUM",
-      description: "A comprehensive cybersecurity monitoring dashboard providing real-time threat detection, log analysis, and incident response tracking. Features interactive data visualizations, automated alerting, and compliance reporting for security operations teams.",
-      images: [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCyNsMK3iXnr3QqswNwaG9iaIMxcttFVfMYd31feFdP7pklNe43RiozTyd_Fe1ko2qZ29r6taKBaEEdAFUHCeugNQatoQSCwmDTLkN4ebKgm-XYDi5q8NP8OqCU_3ha0Rp742ozz6LHNF9SE_tDSSsK5hTFLDKdzibzOPgWIYd0WPPmzut3Rzgj6bL0cUqEQIbtHhGYzTLKD13AegP-rXsi0IKzt-1eWCa9XuZTFch0lB4dwHM3pZ7ocg",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCDc1kAaKusQptnLwSPEv-QqSpAa38BJ6y6_vjHPEPTSK-WDaA1E4CmWfyX1qWAo0AOMmV0L0KKwnK9jP3gA0eRKe_m_y1lgIKyb42q3RRKMBiCaYAtm0S2vDQpnR-PkIgbiDvIQFJIN1E8nTwJkFtQ9VfQu3LaqjDgx1cGBUHcKw6NHH8_SlCK0RxTxI-KCqZzOejPDPJU072ux3l4iBKEIfWGM5NMrSXmnWdWT-WJ3BhWw0bi4YT1TQ"
-      ],
-      github: "https://github.com/placeholder-cipher",
-      live: "https://placeholder-cipher.vercel.app"
-    }
-  };
-
-  function getProjectId() {
+  async function loadCase() {
     const params = new URLSearchParams(window.location.search);
-    return params.get('id') || 'omega';
-  }
+    const id = parseInt(params.get('id'));
+    if (!id) {
+      document.getElementById('case-content').innerHTML = '<p class="text-center py-32 font-label-mono text-on-surface-variant">CASE FILE NOT FOUND</p>';
+      return;
+    }
 
-  function renderCase(projectId) {
-    const project = projects[projectId];
+    const project = await sbGetSingle('projects', 'id=eq.' + id + '&select=*');
     if (!project) {
       document.getElementById('case-content').innerHTML = '<p class="text-center py-32 font-label-mono text-on-surface-variant">CASE FILE NOT FOUND</p>';
       return;
@@ -178,17 +128,13 @@
 
     document.title = `${project.name} - Case File`;
 
-    const statusColor = 
-      project.status === 'ACTIVE' ? 'text-green-400' :
-      project.status === 'PENDING' ? 'text-yellow-400' : 'text-gray-400';
-    const severityColor = 
-      project.severity === 'CRITICAL' ? 'text-red-400' :
-      project.severity === 'HIGH' ? 'text-orange-400' : 'text-yellow-400';
-
-    const techBadges = project.tech.map((t, i) => {
+    const statusColor = project.status === 'ACTIVE' ? 'text-green-400' : project.status === 'PENDING' ? 'text-yellow-400' : 'text-gray-400';
+    const severityColor = project.severity === 'CRITICAL' ? 'text-red-400' : project.severity === 'HIGH' ? 'text-orange-400' : 'text-yellow-400';
+    const tech = (project.tech_stack || []).map((t, i) => {
       const opacity = ['', '/80', '/60'][i] || '/60';
       return `<span class="bg-secondary${opacity} text-background font-label-mono text-xs uppercase py-1 px-2 font-bold">${t}</span>`;
     }).join('');
+    const caseId = `${project.codename || id}-${Math.floor(Math.random() * 9000) + 1000}`;
 
     document.getElementById('case-content').innerHTML = `
       <div class="relative">
@@ -196,17 +142,17 @@
           <div>
             <a href="evidence.html" class="font-label-mono text-xs text-on-surface-variant hover:text-secondary transition-colors">&larr; BACK TO EVIDENCE</a>
             <h1 class="font-display-lg text-4xl md:text-5xl text-on-surface font-bold uppercase tracking-tighter mt-2">${project.name}</h1>
-            <p class="font-label-mono text-sm text-secondary mt-1">${project.tagline}</p>
+            <p class="font-label-mono text-sm text-secondary mt-1">${project.tagline || ''}</p>
           </div>
           <div class="stamp font-label-mono text-sm">CLASSIFIED</div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <div class="case-paper p-2 h-72 overflow-hidden">
-            <img class="ev-img" src="${project.images[0]}" alt="${project.name} evidence photo 1" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-on-surface-variant font-label-mono text-xs\\'>EVIDENCE_IMG_A_MISSING</div>'"/>
+            <img class="ev-img" src="${project.image_url || ''}" alt="${project.name} evidence photo 1" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-on-surface-variant font-label-mono text-xs\\'>EVIDENCE_IMG_A_MISSING</div>'"/>
           </div>
           <div class="case-paper p-2 h-72 overflow-hidden">
-            <img class="ev-img" src="${project.images[1]}" alt="${project.name} evidence photo 2" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-on-surface-variant font-label-mono text-xs\\'>EVIDENCE_IMG_B_MISSING</div>'"/>
+            <img class="ev-img" src="${project.image_url_2 || ''}" alt="${project.name} evidence photo 2" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-on-surface-variant font-label-mono text-xs\\'>EVIDENCE_IMG_B_MISSING</div>'"/>
           </div>
         </div>
 
@@ -215,7 +161,7 @@
             <span class="material-symbols-outlined text-secondary text-sm">description</span>
             <h2 class="font-label-mono text-sm text-secondary uppercase tracking-wider">Case Details</h2>
           </div>
-          <p class="font-body-md text-on-surface-variant leading-relaxed">${project.description}</p>
+          <p class="font-body-md text-on-surface-variant leading-relaxed">${project.description || ''}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -224,7 +170,7 @@
               <span class="material-symbols-outlined text-secondary text-sm">build</span>
               <h2 class="font-label-mono text-sm text-secondary uppercase tracking-wider">Tech Stack</h2>
             </div>
-            <div class="flex flex-wrap gap-2">${techBadges}</div>
+            <div class="flex flex-wrap gap-2">${tech || '<span class="font-label-mono text-xs text-on-surface-variant">NONE LISTED</span>'}</div>
           </div>
           <div class="case-paper p-6">
             <div class="flex items-center gap-2 mb-4 border-b border-outline-variant pb-2">
@@ -234,37 +180,34 @@
             <div class="space-y-3">
               <div class="flex justify-between items-center">
                 <span class="font-label-mono text-xs text-on-surface-variant uppercase">Status</span>
-                <span class="font-label-mono text-sm font-bold ${statusColor}">${project.status}</span>
+                <span class="font-label-mono text-sm font-bold ${statusColor}">${project.status || 'UNKNOWN'}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="font-label-mono text-xs text-on-surface-variant uppercase">Severity</span>
-                <span class="font-label-mono text-sm font-bold ${severityColor}">${project.severity}</span>
+                <span class="font-label-mono text-sm font-bold ${severityColor}">${project.severity || 'UNKNOWN'}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="font-label-mono text-xs text-on-surface-variant uppercase">Case ID</span>
-                <span class="font-label-mono text-sm text-on-surface">${projectId.toUpperCase()}-${Math.floor(Math.random() * 9000) + 1000}</span>
+                <span class="font-label-mono text-sm text-on-surface">${caseId}</span>
               </div>
             </div>
           </div>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="${project.github}" target="_blank" class="flex items-center justify-center gap-2 bg-surface-container-high border border-outline-variant text-on-surface hover:bg-secondary hover:text-background hover:border-secondary font-label-mono text-sm uppercase tracking-wider px-8 py-3 transition-all duration-300">
+          ${project.github_url ? `<a href="${project.github_url}" target="_blank" class="flex items-center justify-center gap-2 bg-surface-container-high border border-outline-variant text-on-surface hover:bg-secondary hover:text-background hover:border-secondary font-label-mono text-sm uppercase tracking-wider px-8 py-3 transition-all duration-300">
             <span class="material-symbols-outlined text-sm">code</span>
             Source Code
-          </a>
-          <a href="${project.live}" target="_blank" class="flex items-center justify-center gap-2 bg-secondary text-background border border-secondary hover:bg-transparent hover:text-secondary font-label-mono text-sm uppercase tracking-wider px-8 py-3 transition-all duration-300">
+          </a>` : ''}
+          ${project.live_url ? `<a href="${project.live_url}" target="_blank" class="flex items-center justify-center gap-2 bg-secondary text-background border border-secondary hover:bg-transparent hover:text-secondary font-label-mono text-sm uppercase tracking-wider px-8 py-3 transition-all duration-300">
             <span class="material-symbols-outlined text-sm">open_in_new</span>
             Live Site
-          </a>
+          </a>` : ''}
         </div>
       </div>
     `;
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const id = getProjectId();
-    renderCase(id);
-  });
+  document.addEventListener('DOMContentLoaded', loadCase);
 </script>
 </body></html>
