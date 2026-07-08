@@ -8,6 +8,7 @@ CREATE TABLE projects (
   status TEXT DEFAULT 'ACTIVE',
   severity TEXT DEFAULT 'MEDIUM',
   exhibit_label TEXT DEFAULT '',
+  banner_url TEXT DEFAULT '',
   image_url TEXT DEFAULT '',
   image_url_2 TEXT DEFAULT '',
   description TEXT DEFAULT '',
@@ -74,8 +75,9 @@ CREATE POLICY "Anon all likes" ON likes FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Anon all admin_settings" ON admin_settings FOR ALL USING (true) WITH CHECK (true);
 
 -- Seed initial projects
-INSERT INTO projects (name, codename, tagline, tech_stack, status, severity, exhibit_label, image_url, image_url_2, description, github_url, live_url, display_order) VALUES
+INSERT INTO projects (name, codename, tagline, tech_stack, status, severity, exhibit_label, banner_url, image_url, image_url_2, description, github_url, live_url, display_order) VALUES
 ('PROJECT OMEGA', 'omega', 'Fullstack Streaming Platform', ARRAY['React', 'Node.js', 'PostgreSQL'], 'ACTIVE', 'CRITICAL', 'EXHIBIT A-1',
+ 'https://lh3.googleusercontent.com/aida-public/AB6AXuAnSxIRAefH0x4DsitrkT8S7WHc5khkzz8soJPJdx5Mq7177TBH90MJsZpytHI5Ccvr40OQ_s0CJ7Hmu0yn5JgYOqIA70LqwzbH9Ca33SF1URrwdPJk6WCpTwCRvKyBvAT1rer2g8HkfQXORdHNAMOZR2XCNvpaIG92UBbllxwAyAFPvJ2lk8E0zzSlPFzUOWuH5djg0hBydUt6_Kd0IazTik9UNTeqM1mPkS_MrwrOd9t38-FgOS3hSw',
  'https://lh3.googleusercontent.com/aida-public/AB6AXuAnSxIRAefH0x4DsitrkT8S7WHc5khkzz8soJPJdx5Mq7177TBH90MJsZpytHI5Ccvr40OQ_s0CJ7Hmu0yn5JgYOqIA70LqwzbH9Ca33SF1URrwdPJk6WCpTwCRvKyBvAT1rer2g8HkfQXORdHNAMOZR2XCNvpaIG92UBbllxwAyAFPvJ2lk8E0zzSlPFzUOWuH5djg0hBydUt6_Kd0IazTik9UNTeqM1mPkS_MrwrOd9t38-FgOS3hSw',
  'https://lh3.googleusercontent.com/aida-public/AB6AXuCv0NDij326wbtLIqpLirF23KZMESzTbWT5QP2qnip2oFJ7GPOULpJBa2MiTwKbQaWDzV1Mvc64sg5WoDFyZOahp_bk676i_hFzM7Bhwc4Yy9ccyO7fNbG5c6TxbM5VcYauCsllglpGhT3qaXKN1wCYaN6OHJpOH1v8Rc21GW7MLFPszD_Bev_pgjMsQZmHJpWkDENTaEk_Tz2aBy2PaeGDJfvwQcbOBXjZq6yxk_gpi-0-1t3n41N9zg',
  'A fullstack streaming platform capable of handling millions of concurrent users. Features real-time content delivery, personalized recommendation engine, and adaptive bitrate streaming.',
@@ -83,17 +85,20 @@ INSERT INTO projects (name, codename, tagline, tech_stack, status, severity, exh
 
 ('THE SYNAPSE', 'synapse', 'AI Chat Interface', ARRAY['Python', 'FastAPI', 'OpenAI'], 'ACTIVE', 'HIGH', 'EXHIBIT B-2',
  'https://lh3.googleusercontent.com/aida-public/AB6AXuCv0NDij326wbtLIqpLirF23KZMESzTbWT5QP2qnip2oFJ7GPOULpJBa2MiTwKbQaWDzV1Mvc64sg5WoDFyZOahp_bk676i_hFzM7Bhwc4Yy9ccyO7fNbG5c6TxbM5VcYauCsllglpGhT3qaXKN1wCYaN6OHJpOH1v8Rc21GW7MLFPszD_Bev_pgjMsQZmHJpWkDENTaEk_Tz2aBy2PaeGDJfvwQcbOBXjZq6yxk_gpi-0-1t3n41N9zg',
+ 'https://lh3.googleusercontent.com/aida-public/AB6AXuCv0NDij326wbtLIqpLirF23KZMESzTbWT5QP2qnip2oFJ7GPOULpJBa2MiTwKbQaWDzV1Mvc64sg5WoDFyZOahp_bk676i_hFzM7Bhwc4Yy9ccyO7fNbG5c6TxbM5VcYauCsllglpGhT3qaXKN1wCYaN6OHJpOH1v8Rc21GW7MLFPszD_Bev_pgjMsQZmHJpWkDENTaEk_Tz2aBy2PaeGDJfvwQcbOBXjZq6yxk_gpi-0-1t3n41N9zg',
  'https://lh3.googleusercontent.com/aida-public/AB6AXuCDc1kAaKusQptnLwSPEv-QqSpAa38BJ6y6_vjHPEPTSK-WDaA1E4CmWfyX1qWAo0AOMmV0L0KKwnK9jP3gA0eRKe_m_y1lgIKyb42q3RRKMBiCaYAtm0S2vDQpnR-PkIgbiDvIQFJIN1E8nTwJkFtQ9VfQu3LaqjDgx1cGBUHcKw6NHH8_SlCK0RxTxI-KCqZzOejPDPJU072ux3l4iBKEIfWGM5NMrSXmnWdWT-WJ3BhWw0bi4YT1TQ',
  'An advanced AI chat interface leveraging large language models for natural conversation. Features context-aware responses, multi-turn dialogue management.',
  'https://github.com/placeholder-synapse', 'https://placeholder-synapse.vercel.app', 2),
 
 ('GHOST PROTOCOL', 'ghost', 'Real-time Collaboration Hub', ARRAY['Next.js', 'TypeScript', 'Prisma'], 'PENDING', 'CRITICAL', 'EXHIBIT C-3',
  'https://lh3.googleusercontent.com/aida-public/AB6AXuCDc1kAaKusQptnLwSPEv-QqSpAa38BJ6y6_vjHPEPTSK-WDaA1E4CmWfyX1qWAo0AOMmV0L0KKwnK9jP3gA0eRKe_m_y1lgIKyb42q3RRKMBiCaYAtm0S2vDQpnR-PkIgbiDvIQFJIN1E8nTwJkFtQ9VfQu3LaqjDgx1cGBUHcKw6NHH8_SlCK0RxTxI-KCqZzOejPDPJU072ux3l4iBKEIfWGM5NMrSXmnWdWT-WJ3BhWw0bi4YT1TQ',
+ 'https://lh3.googleusercontent.com/aida-public/AB6AXuCDc1kAaKusQptnLwSPEv-QqSpAa38BJ6y6_vjHPEPTSK-WDaA1E4CmWfyX1qWAo0AOMmV0L0KKwnK9jP3gA0eRKe_m_y1lgIKyb42q3RRKMBiCaYAtm0S2vDQpnR-PkIgbiDvIQFJIN1E8nTwJkFtQ9VfQu3LaqjDgx1cGBUHcKw6NHH8_SlCK0RxTxI-KCqZzOejPDPJU072ux3l4iBKEIfWGM5NMrSXmnWdWT-WJ3BhWw0bi4YT1TQ',
  'https://lh3.googleusercontent.com/aida-public/AB6AXuAnSxIRAefH0x4DsitrkT8S7WHc5khkzz8soJPJdx5Mq7177TBH90MJsZpytHI5Ccvr40OQ_s0CJ7Hmu0yn5JgYOqIA70LqwzbH9Ca33SF1URrwdPJk6WCpTwCRvKyBvAT1rer2g8HkfQXORdHNAMOZR2XCNvpaIG92UBbllxwAyAFPvJ2lk8E0zzSlPFzUOWuH5djg0hBydUt6_Kd0IazTik9UNTeqM1mPkS_MrwrOd9t38-FgOS3hSw',
  'A real-time collaboration platform enabling simultaneous editing, communication, and project management. Features end-to-end encryption and WebSocket-based live sync.',
  'https://github.com/placeholder-ghost', 'https://placeholder-ghost.vercel.app', 3),
 
 ('CIPHER HOUND', 'cipher', 'Cybersecurity Dashboard', ARRAY['React', 'Tailwind CSS'], 'CLOSED', 'MEDIUM', 'EXHIBIT D-4',
+ 'https://lh3.googleusercontent.com/aida-public/AB6AXuCyNsMK3iXnr3QqswNwaG9iaIMxcttFVfMYd31feFdP7pklNe43RiozTyd_Fe1ko2qZ29r6taKBaEEdAFUHCeugNQatoQSCwmDTLkN4ebKgm-XYDi5q8NP8OqCU_3ha0Rp742ozz6LHNF9SE_tDSSsK5hTFLDKdzibzOPgWIYd0WPPmzut3Rzgj6bL0cUqEQIbtHhGYzTLKD13AegP-rXsi0IKzt-1eWCa9XuZTFch0lB4dwHM3pZ7ocg',
  'https://lh3.googleusercontent.com/aida-public/AB6AXuCyNsMK3iXnr3QqswNwaG9iaIMxcttFVfMYd31feFdP7pklNe43RiozTyd_Fe1ko2qZ29r6taKBaEEdAFUHCeugNQatoQSCwmDTLkN4ebKgm-XYDi5q8NP8OqCU_3ha0Rp742ozz6LHNF9SE_tDSSsK5hTFLDKdzibzOPgWIYd0WPPmzut3Rzgj6bL0cUqEQIbtHhGYzTLKD13AegP-rXsi0IKzt-1eWCa9XuZTFch0lB4dwHM3pZ7ocg',
  'https://lh3.googleusercontent.com/aida-public/AB6AXuCDc1kAaKusQptnLwSPEv-QqSpAa38BJ6y6_vjHPEPTSK-WDaA1E4CmWfyX1qWAo0AOMmV0L0KKwnK9jP3gA0eRKe_m_y1lgIKyb42q3RRKMBiCaYAtm0S2vDQpnR-PkIgbiDvIQFJIN1E8nTwJkFtQ9VfQu3LaqjDgx1cGBUHcKw6NHH8_SlCK0RxTxI-KCqZzOejPDPJU072ux3l4iBKEIfWGM5NMrSXmnWdWT-WJ3BhWw0bi4YT1TQ',
  'A comprehensive cybersecurity monitoring dashboard providing real-time threat detection, log analysis, and incident response tracking.',

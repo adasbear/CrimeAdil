@@ -169,7 +169,7 @@
   }
 
   async function showProjectModal(id) {
-    let project = { name:'', codename:'', tagline:'', tech_stack:[], status:'ACTIVE', severity:'MEDIUM', exhibit_label:'', image_url:'', image_url_2:'', description:'', github_url:'', live_url:'', display_order:0 };
+    let project = { name:'', codename:'', tagline:'', tech_stack:[], status:'ACTIVE', severity:'MEDIUM', exhibit_label:'', banner_url:'', image_url:'', image_url_2:'', description:'', github_url:'', live_url:'', display_order:0 };
     if (id) {
       const data = await sbGetSingle('projects', 'id=eq.' + id + '&select=*');
       if (data) project = data;
@@ -189,8 +189,9 @@
           <div><label>Exhibit Label</label><input class="input" id="f-exhibit" value="${(project.exhibit_label||'').replace(/"/g,'&quot;')}"/></div>
           <div><label>Display Order</label><input class="input" id="f-order" type="number" value="${project.display_order}"/></div>
           <div class="col-span-2"><label>Tech Stack (comma separated)</label><input class="input" id="f-tech" value="${techStr.replace(/"/g,'&quot;')}"/></div>
-          <div class="col-span-2"><label>Image URL 1</label><input class="input" id="f-img1" value="${(project.image_url||'').replace(/"/g,'&quot;')}"/></div>
-          <div class="col-span-2"><label>Image URL 2</label><input class="input" id="f-img2" value="${(project.image_url_2||'').replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>Banner Image URL (card thumbnail)</label><input class="input" id="f-banner" value="${(project.banner_url||'').replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>Image URL 1 (detail page)</label><input class="input" id="f-img1" value="${(project.image_url||'').replace(/"/g,'&quot;')}"/></div>
+          <div class="col-span-2"><label>Image URL 2 (detail page)</label><input class="input" id="f-img2" value="${(project.image_url_2||'').replace(/"/g,'&quot;')}"/></div>
           <div class="col-span-2"><label>GitHub URL</label><input class="input" id="f-github" value="${(project.github_url||'').replace(/"/g,'&quot;')}"/></div>
           <div class="col-span-2"><label>Live URL</label><input class="input" id="f-live" value="${(project.live_url||'').replace(/"/g,'&quot;')}"/></div>
           <div class="col-span-2"><label>Description</label><textarea class="input" id="f-desc" rows="4">${(project.description||'').replace(/</g,'&lt;')}</textarea></div>
@@ -214,6 +215,7 @@
       exhibit_label: document.getElementById('f-exhibit').value,
       display_order: parseInt(document.getElementById('f-order').value) || 0,
       tech_stack: document.getElementById('f-tech').value.split(',').map(s => s.trim()).filter(Boolean),
+      banner_url: document.getElementById('f-banner').value,
       image_url: document.getElementById('f-img1').value,
       image_url_2: document.getElementById('f-img2').value,
       github_url: document.getElementById('f-github').value,
