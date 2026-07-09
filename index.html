@@ -239,6 +239,7 @@
 <a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
 <a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
 <a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="field-notes.html">FIELD NOTES</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="contact.html">CONTACT</a>
 </nav>
 </header>
 <main class="relative w-full h-full z-20" id="board-container">
@@ -286,6 +287,7 @@
 </a>
 <a class="board-item bg-gray-200 text-black p-4 w-48 text-center shadow-lg transform rotate-6 block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary" id="node-mo" href="evidence.html" style="bottom: 20%; left: 20%;" aria-label="Open evidence page"><div class="pin" style="top: 5px; left: 50%; transform: translateX(-50%);"></div><h3 class="font-headline font-bold text-lg leading-tight uppercase">EVIDENCE</h3><p class="font-label text-[10px] text-gray-600 mt-2">SECURED ARTIFACTS</p></a>
 <a class="board-item post-it block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary z-40" id="node-timeline" href="field-notes.html" style="top: 25%; right: 15%;" aria-label="Open field notes page"><div class="pin" style="top: 5px; left: 50%; transform: translateX(-50%);"></div><h3 class="font-headline text-red-800 font-bold text-xl uppercase mb-2">FIELD NOTES</h3><p class="font-label text-xs text-gray-500 uppercase">OBSERVATIONS &amp; LOGS</p></a>
+<a class="board-item post-it block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary z-40" id="node-contact" href="contact.html" style="top: 55%; right: 15%;" aria-label="Open contact page"><div class="pin" style="top: 5px; left: 50%; transform: translateX(-50%);"></div><h3 class="font-headline text-red-800 font-bold text-xl uppercase mb-2">CONTACT</h3><p class="font-label text-xs text-gray-500 uppercase">CLASSIFIED COMMS</p></a>
 <a class="board-item evidence-folder block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary" id="node-evidence" href="evidence.html" style="bottom: 25%; right: 20%;" aria-label="Open evidence page">
 <div class="pin" style="top: 10px; right: 20px;"></div>
 <div class="bg-white p-4 h-full flex items-center justify-center transform -rotate-2 border border-gray-300">
@@ -324,7 +326,7 @@
         ctx.setLineDash([5, 5]);
         
         const center = getPinCenter('node-center');
-        const nodes = ['node-suspect', 'node-mo', 'node-timeline', 'node-evidence'];
+        const nodes = ['node-suspect', 'node-mo', 'node-timeline', 'node-contact', 'node-evidence'];
         
         nodes.forEach(id => {
           const target = getPinCenter(id);

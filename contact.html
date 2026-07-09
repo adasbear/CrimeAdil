@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact - Classified Comms</title>
+<link rel="icon" type="image/png" href="fav.png"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  body { background: #131313; color: #e5e2e1; }
+  .scanlines { position: fixed; top:0; left:0; width:100vw; height:100vh; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1)); background-size: 100% 4px; pointer-events: none; z-index: 9999; opacity: 0.15; }
+  .dossier-tabs { clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%); }
+  .tactical-card { background: linear-gradient(145deg, #1c1c1c, #131313); border: 1px solid #333; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8); }
+  .contact-input { background: #0e0e0e; border: 1px solid #2a2a2a; color: #e5e2e1; outline: none; width: 100%; padding: 10px 14px; border-radius: 4px; font-family: 'Geist', sans-serif; }
+  .contact-input:focus { border-color: #ff4500; }
+  .contact-input::placeholder { color: #5d4038; }
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff4500; box-shadow: 0 0 8px #ff4500; }
+</style>
+</head>
+<body class="font-body antialiased relative min-h-screen">
+<div class="scanlines"></div>
+<div class="fixed inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] pointer-events-none z-10"></div>
+<header class="fixed top-0 left-0 w-full z-50 flex justify-center pt-4">
+<nav class="flex gap-1 md:gap-2 overflow-x-auto flex-nowrap">
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="index.html">CRIME SCENE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="profile.html">SUSPECT</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="evidence.html">EVIDENCE</a>
+<a class="dossier-tabs bg-surface-container-high text-on-surface-variant font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap hover:text-primary transition-colors" href="field-notes.html">FIELD NOTES</a>
+<a class="dossier-tabs bg-[#fdf5c9] text-black font-label px-3 md:px-5 py-2 text-sm whitespace-nowrap font-bold shadow-md hover:bg-white transition-colors" href="contact.html">CONTACT</a>
+</nav>
+</header>
+<main class="max-w-2xl mx-auto px-4 pt-28 pb-16 relative z-20">
+<div class="flex items-center gap-3 mb-8">
+<span class="status-dot"></span>
+<h1 class="font-headline text-3xl md:text-4xl text-primary font-bold uppercase tracking-tight">CLASSIFIED COMMS</h1>
+</div>
+<p class="font-label text-sm text-on-surface-variant mb-8">SECURE CHANNEL // ENCRYPTED TRANSMISSION</p>
+<form id="contact-form" class="space-y-6">
+<div class="tactical-card rounded-xl p-6 md:p-8">
+<div class="space-y-4">
+<div>
+<label class="font-label text-xs text-on-surface-variant uppercase tracking-wider block mb-1">CALLSIGN</label>
+<input type="text" id="name" class="contact-input" placeholder="Your callsign..." required/>
+</div>
+<div>
+<label class="font-label text-xs text-on-surface-variant uppercase tracking-wider block mb-1">COMMS FREQ (EMAIL)</label>
+<input type="email" id="email" class="contact-input" placeholder="frequency@domain.ext" required/>
+</div>
+<div>
+<label class="font-label text-xs text-on-surface-variant uppercase tracking-wider block mb-1">MESSAGE</label>
+<textarea id="message" rows="5" class="contact-input" placeholder="Encrypt your message..." required></textarea>
+</div>
+</div>
+<div class="border-t border-surface-container-highest pt-4 mt-4">
+<button type="submit" class="w-full bg-primary text-on-primary font-label text-sm uppercase tracking-wider px-6 py-3 hover:opacity-80 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">send</span>
+TRANSMIT
+</button>
+</div>
+<div id="form-status" class="hidden font-label text-sm text-center"></div>
+</div>
+</form>
+<div class="tactical-card rounded-xl p-6 mt-6">
+<h2 class="font-label text-sm text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+ALTERNATE CHANNELS
+</h2>
+<div class="space-y-3 font-body text-sm text-on-surface-variant">
+<p><span class="text-primary font-label">EMAIL:</span> adil@example.com</p>
+<p><span class="text-primary font-label">GITHUB:</span> <a href="https://github.com/adasbear" class="text-secondary hover:text-primary transition-colors" target="_blank">github.com/adasbear</a></p>
+</div>
+</div>
+</main>
+<script>
+  document.getElementById('contact-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const status = document.getElementById('form-status');
+    status.className = 'font-label text-sm text-center';
+    status.textContent = 'ENCRYPTING & TRANSMITTING...';
+    status.classList.remove('hidden');
+    const data = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      message: document.getElementById('message').value
+    };
+    try {
+      const res = await fetch('https://formspree.io/f/your-form-id', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        status.textContent = '✓ TRANSMISSION SUCCESSFUL';
+        status.className = 'font-label text-sm text-center text-green-400';
+        this.reset();
+      } else {
+        throw new Error('Transmission failed');
+      }
+    } catch {
+      status.textContent = '⚠ TRANSMISSION FAILED - CHANNEL OFFLINE';
+      status.className = 'font-label text-sm text-center text-red-400';
+    }
+  });
+</script>
+</body></html>
